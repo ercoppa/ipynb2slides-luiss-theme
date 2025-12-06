@@ -1,0 +1,1592 @@
+/*
+*  https://www.hogent.be/dit-is-hogent/huisstijl/huisstijl-kleuren/
+*  https://fonts.google.com/specimen/Montserrat
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@font-face {
+  font-family: "LUISS";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../fonts/LuissSans-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "LUISS";
+  font-weight: bold;
+  font-style: normal;
+  src: url("../fonts/LuissSans-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "LUISS";
+  font-weight: normal;
+  font-style: italic;
+  src: url("../fonts/LuissSans-italic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "LUISS";
+  font-weight: bold;
+  font-style: italic;
+  src: url("../fonts/LuissSans-BoldItalic.otf") format("opentype");
+}
+section.has-dark-background,
+section.has-dark-background h1,
+section.has-dark-background h2,
+section.has-dark-background h3,
+section.has-dark-background h4,
+section.has-dark-background h5,
+section.has-dark-background h6 {
+  color: var(--hogent-white);
+}
+
+:root {
+    --hogent-blue: #4ca2d5;
+    --hogent-gray: #c3bbaf;
+    --hogent-red: #ef8767;
+    --hogent-white: #ffffff;
+    --hogent-black: #000000;
+    --luiss-blue: #003a70;
+    --hogent-font-family: "LUISS", "Montserrat", "Arial", sans-serif;
+
+    --wikipedia-a-color: #3366cc;
+    --wikipedia-code-bg-color: #f8f8f8;
+    --wikipedia-code-border-color: #eaecf0;
+
+    --github-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+
+    --header-1-align: center;
+    --header-align: left;
+    --header-color: var(--hogent-black);
+
+    --content-align: left;
+    --content-line-height: 1.3;
+    --content-padding-bottom: 0.5em;
+
+    --math-align: center;
+
+    --smaller-font-size: 2.6rem;
+
+    --a-color: var(--luiss-blue);
+    --inline-code-bg-color: var(--wikipedia-code-bg-color);
+    --inline-code-border-color: var(--wikipedia-code-border-color);
+    --code-bg-color: var(--wikipedia-code-bg-color);
+    --code-border-color: var(--wikipedia-code-border-color);
+
+    --quote-color: grey;
+    --quote-bg-color: white;
+
+    --code-max-height: 850px;
+    --pre-max-height: 750px;
+}
+
+body {
+    background-color: var(--hogent-black) !important;
+    font-family: var(--hogent-font-family);
+    font-weight: 400;
+    font-size: 3.2rem;
+}
+
+section {
+    text-align: var(--content-align);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: var(--header-align);
+    font-weight: 800;
+    margin-bottom: var(--content-padding-bottom);
+    line-height: 1.25;
+}
+
+h1 {
+    text-align: var(--header-1-align);
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+h3 {
+    font-size: 1.3em;
+}
+
+h4 {
+    font-size: 1em;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+i,
+em {
+    font-style: italic;
+}
+
+a {
+    color: var(--a-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+code {
+    background-color: transparent;
+    font-family: "Roboto Mono", monospace;
+    font-size: 0.75em;
+    padding: 0.00em 0.0em 0.1em 0.00em;
+    border: none;
+    vertical-align: 0.00em;
+}
+
+pre code:not(.mermaid) {
+    background-color: var(--code-bg-color);
+    text-align: left;
+    font-size: var(--smaller-font-size);
+    white-space: pre-wrap;
+    padding-left: 20px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 0.0em; /* var(--content-padding-bottom); */
+    border-width: 0.1ch;
+    border-style: solid;
+    border-color: var(--code-border-color);
+    border-radius: 0.2em;
+}
+
+/* Center mermaid diagrams */
+pre code.mermaid {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+pre code.mermaid svg {
+    margin: 0 auto !important;
+}
+
+/* Code blocks with line numbers - remove left padding */
+pre code[data-line-numbers] {
+    padding-left: 10px !important;
+}
+
+/* Style the line numbers table */
+pre code .hljs-ln {
+    border-collapse: collapse !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    display: table !important;
+    width: 100% !important;
+    max-height: none !important;
+}
+
+pre code .hljs-ln-numbers {
+    padding-right: 10px !important;
+    padding-left: 0 !important;
+    text-align: right !important;
+    user-select: none;
+    width: 1% !important;
+    font-size: inherit !important;
+}
+
+pre code .hljs-ln-code {
+    padding-left: 15px !important;
+    font-size: inherit !important;
+}
+
+pre code .hljs-ln-line {
+    font-size: inherit !important;
+}
+
+pre.code-output {
+    margin-top: 0.1em !important;
+    margin-bottom: 1em !important;
+    padding-bottom: 0.5em !important;
+}
+
+pre.code-output code {
+    background-color: white !important;
+    border-color: #cccccc !important;
+    padding-bottom: 5px !important;
+    margin-bottom: 10px !important;
+    padding-top: 15px !important;
+    font-size: 0.75em !important;
+    line-height: 0.9 !important;
+}
+
+/* Add spacing for elements after code output */
+pre.code-output + * {
+    margin-top: 1em !important;
+}
+
+pre.code-output + div {
+    margin-top: 1em !important;
+}
+
+/* Reduce spacing between code output and alert boxes */
+pre.code-output + .alert {
+    margin-top: 0.2em !important;
+}
+
+/* Reduce spacing between code output and fragment-wrapped content */
+pre.code-output + .fragment {
+    margin-top: 0.2em !important;
+}
+
+/* Cell centering
+ * Center content without forcing full slide height, to avoid huge
+ * padding before/after single elements like images.
+ */
+.cell-center {
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	align-items: center !important;
+	text-align: center !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+/* Limit image size inside tables so they don't blow up row height */
+.content-center table img {
+	max-height: 40vh;
+	height: auto;
+	width: auto;
+}
+
+/* Fragment - remove extra spacing */
+.fragment {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* But keep normal list spacing when the fragment is directly on a list item */
+.reveal .slides section[data-state~="normal"] .content-center li.fragment {
+    margin-left: 1.5ch !important;
+    margin-bottom: 0.2em !important;
+    /* Match the generic list item line-height used for normal slides */
+    line-height: 1.2 !important;
+}
+
+/* In normal slides, ensure fragments inside content-center span full width so
+   alerts inside them have the same width as other alerts */
+.reveal .slides section[data-state~="normal"] .content-center .fragment {
+    width: 100% !important;
+    align-self: stretch !important;
+}
+
+/* Alert boxes */
+.alert {
+    padding: 0.35em 1em !important;
+    padding-top: 0.5em !important;
+    margin-bottom: 0.2em !important;
+    border-left: 5px solid !important;
+    border-radius: 4px !important;
+    font-size: 0.9em !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Alerts inside fragments in normal slides should match the full-width alerts */
+.reveal .slides section[data-state~="normal"] .content-center .fragment .alert {
+    width: 100% !important;
+}
+
+.alert b {
+    font-weight: bold !important;
+}
+
+/* Warning - Yellow */
+.alert-warning {
+    background-color: #fff3cd !important;
+    border-color: #ffc107 !important;
+    color: #856404 !important;
+}
+
+/* Note - Blue */
+.alert-note {
+    background-color: #d1ecf1 !important;
+    border-color: #17a2b8 !important;
+    color: #0c5460 !important;
+}
+
+/* Hint - Green */
+.alert-hint {
+    background-color: #d4edda !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+}
+
+/* Recall - Light Blue */
+.alert-recall {
+    background-color: #cce5ff !important;
+    border-color: #004085 !important;
+    color: #004085 !important;
+}
+
+p {
+    line-height: var(--content-line-height);
+    margin-bottom: var(--content-padding-bottom);
+}
+
+blockquote {
+    color: var(--quote-color);
+    background-color: var(--quote-bg-color);
+    font-style: italic;
+    line-height: var(--content-line-height);
+    border-left-style: solid;
+    border-left-width: 0.2ch;
+    border-color: var(--quote-color);
+    padding-left: 0.5ch;
+    margin-bottom: var(--content-padding-bottom);
+}
+
+img,
+video,
+iframe {
+    max-width: 100%; /* Must be % because of multicolumn, as those are sub-divs */
+    max-height: 90vh;
+    margin-bottom: var(--content-padding-bottom);
+}
+
+pre {
+    max-height: var(--pre-max-height) !important;
+    overflow: hidden !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+}
+
+pre code {
+    max-height: var(--code-max-height);
+    overflow-y: auto;
+    box-sizing: border-box !important;
+}
+
+/* Keep code block height stable during line highlighting */
+pre code[data-line-numbers] {
+    height: auto;
+    max-height: var(--code-max-height) !important;
+    overflow-y: auto !important;
+    display: block !important;
+}
+
+/* Prevent fragments from expanding the code block */
+pre code.fragment[data-line-numbers],
+pre code.fragment.visible[data-line-numbers],
+pre code.fragment.current-fragment[data-line-numbers] {
+    max-height: var(--code-max-height) !important;
+    overflow-y: auto !important;
+    height: 100% !important;
+}
+
+div.MathJax_Display {
+    text-align: var(--math-align) !important;
+    margin-bottom: var(--content-padding-bottom);
+}
+
+table {
+    font-size: var(--smaller-font-size);
+    border-collapse: collapse;
+    margin-bottom: var(--content-padding-bottom);
+}
+
+th {
+    font-weight: bold;
+}
+
+td {
+    border-top-style: solid;
+    border-width: 0.1ch;
+    border-color: var(--hogent-black);
+}
+
+th,
+td {
+    padding: 0.2em 0.8em 0.2em 0.8em;
+}
+
+li {
+    text-align: left;
+    line-height: var(--content-line-height);
+    margin-left: 3ch;
+}
+
+.reveal section > ul,
+.reveal section > ol {
+    margin-bottom: var(--content-padding-bottom);
+}
+
+.reveal section ol {
+    list-style-type: decimal;
+}
+
+.reveal section ul {
+    list-style-type: disc;
+}
+
+.reveal section ul ul {
+    list-style-type: square;
+}
+
+.reveal section ul ul ul {
+    list-style-type: circle;
+}
+
+.reveal .progress {
+    height: 1vh;
+    background: var(--hogent-white);
+}
+
+.reveal .progress span {
+    background: var(--luiss-blue);
+}
+
+.reveal .controls {
+    color: var(--hogent-blue);
+    right: 6em;
+}
+
+.reveal .slide-number {
+    font-size: 1rem;
+    color: var(--hogent-blue);
+    background-color: transparent;
+}
+
+.reveal .slide-number a {
+    text-decoration: none;
+}
+
+div.center > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.multicolumn {
+    /* https://stackoverflow.com/a/44392145 */
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 5vw;
+    margin-bottom: var(--content-padding-bottom);
+}
+
+.front {
+  background-image: url('../backgrounds/front.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#title {
+    text-align: left;
+    margin-top: -50px;
+    padding-left: 2.2%;
+    padding-bottom: 15px;
+    font-size: 1.6em;
+    font-weight: bold;
+    color: var(--luiss-blue);
+}
+
+#title-2 {
+    text-align: left;
+    padding-left: 2.2%;
+    font-size: 1.6em;
+    padding-bottom: 15px;
+    font-weight: bold;
+    color: var(--luiss-blue);
+}
+
+#subtitle {
+    text-align: left;
+    padding-left: 2.2%;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+    color: var(--luiss-blue);
+}
+
+#subtitle-2 {
+    text-align: left;
+    padding-left: 2.2%;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+    color: var(--luiss-blue);
+}
+
+#date {
+    text-align: left;
+    padding-left: 2.25%;
+    padding-top: 3%;
+    font-size: 1.0em;
+    font-weight: bold;
+    color: var(--luiss-blue);
+}
+
+.hide-controls .controls {
+  display: none !important;
+}
+
+.hide-controls .slide-number {
+  display: none !important;
+}
+
+.break-green .slide-background-content {
+    background-image: url('../backgrounds/green.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.break-green {
+    color: white;
+}
+
+.break-green h2 {
+    margin-top: -100px;
+    color: white;
+    font-weight: bold;
+    font-size: 2.7em;
+    padding-left: 2.5%;
+    padding-bottom: 0;
+}
+
+.break-green p {
+    padding-top: 0;
+    margin-top: -30px;
+    font-size: 1.8em;
+    padding-left: 2.5%;
+}
+
+.break-blue .slide-background-content {
+    background-image: url('../backgrounds/blue.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.break-blue {
+    color: white;
+}
+
+.break-blue h2 {
+    margin-top: -100px;
+    color: white;
+    font-weight: bold;
+    font-size: 2.7em;
+    padding-left: 2.5%;
+    padding-bottom: 0;
+}
+
+.break-blue p {
+    padding-top: 0;
+    margin-top: -30px;
+    font-size: 1.8em;
+    padding-left: 2.5%;
+}
+
+.toc-blue .slide-background-content {
+    background-image: url('../backgrounds/blue.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.toc-blue {
+    color: white;
+}
+
+.toc-blue h2 {
+    margin-top: -100px;
+    color: white;
+    font-weight: bold;
+    font-size: 2.7em;
+    padding-left: 2.5%;
+    padding-bottom: 0;
+}
+
+.toc-blue p {
+    margin-top: -50px;
+    font-size: 1.6em;
+    padding-left: 2.5%;
+    font-weight: bold;
+}
+
+.toc-blue ol {
+    font-weight: normal;
+    padding-top: 20px;
+}
+
+.toc-blue li {
+    font-size: 1.3em;
+    font-weight: normal;
+    margin-left: 2.55%;
+    padding-bottom: 20px;
+}
+
+.toc-blue strong {
+    color: white !important;
+}
+    
+
+.normal .slide-background-content {
+    background-image: url('../backgrounds/normal.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Default normal typography when body has normal class */
+body.normal .reveal .slides section h2 {
+    color: var(--luiss-blue) !important;
+    padding-left: 2.5% !important;
+    padding-right: 2.5% !important;
+    font-size: 1.1em !important;
+    font-weight: bold !important;
+    margin-top: 25px !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+body.normal .reveal .slides section .content-center p {
+    color: var(--luiss-blue) !important;
+    font-size: 1.05em;
+    margin: 0 !important;
+    margin-bottom: 0.5em !important;
+}
+
+body.normal .reveal .slides section strong {
+    color: var(--luiss-blue) !important;
+}
+
+.normal strong {
+    color: var(--luiss-blue) !important;
+}
+
+/* Force the section to use flex */
+.reveal .slides section[data-state~="normal"] {
+    color: var(--luiss-blue) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    height: 100% !important;
+    padding-top: 10px !important;
+    gap: 0 !important;
+}
+
+.reveal .slides section[data-state~="normal"] h2 {
+    color: var(--luiss-blue) !important;
+    padding-left: 2.5% !important;
+    padding-right: 2.5% !important;
+    font-size: 1.1em !important;
+    font-weight: bold !important;
+    margin-top: 25px !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    flex: 0 0 auto !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    padding-left: 2.5% !important;
+    padding-right: 2.5% !important;
+    padding-bottom: 100px !important;
+    margin-top: -20px !important;
+    /* Base normal text color */
+    color: var(--luiss-blue) !important;
+}
+
+/* Two column layout for normal slides */
+.reveal .slides section[data-state~="normal"] .content-center .columns-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 2em !important;
+    width: 100% !important;
+}
+
+/* Top-aligned columns */
+.reveal .slides section[data-state~="normal"] .content-center .columns-container.columns-top {
+    align-items: flex-start !important;
+}
+
+/* Center-aligned columns (default) */
+.reveal .slides section[data-state~="normal"] .content-center .columns-container.columns-center {
+    align-items: center !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .col {
+    flex: 1 1 0% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .col[style*="width"] {
+    flex: 0 0 auto !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .col img {
+    width: 100%;
+    object-fit: contain;
+    /* Global cap so column images never cover title or bottom header */
+    max-height: 55vh;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .col img[style] {
+    width: auto;
+    max-height: none;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center li > p {
+    margin: 0 !important;
+    display: inline !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center p {
+    margin: 0 !important;
+    margin-bottom: 0.5em !important;
+    font-size: 0.95em;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center > ul,
+.reveal .slides section[data-state~="normal"] .content-center > ol,
+.reveal .slides section[data-state~="normal"] .content-center .col > ul,
+.reveal .slides section[data-state~="normal"] .content-center .col > ol {
+    font-size: 0.95em;
+}
+
+/* Code blocks in normal slides */
+.reveal .slides section[data-state~="normal"] .content-center pre {
+    margin-top: 0 !important;
+    margin-bottom: 0.2em !important;
+    font-size: 1.0em;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center code {
+    font-size: 0.80em;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center pre code {
+    font-size: 0.8em !important;
+    display: block;
+    line-height: 1.15 !important;
+}
+
+/* Inline code in headings should match heading size and alignment */
+.reveal .slides section[data-state~="normal"] h1 code,
+.reveal .slides section[data-state~="normal"] h2 code,
+.reveal .slides section[data-state~="normal"] h3 code,
+.reveal .slides section[data-state~="normal"] h4 code,
+.reveal .slides section[data-state~="normal"] h5 code,
+.reveal .slides section[data-state~="normal"] h6 code {
+    font-size: 0.80em !important;
+    vertical-align: baseline !important;
+    line-height: inherit !important;
+}
+
+/* Images in normal slides should be centered */
+.reveal .slides section[data-state~="normal"] .content-center img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Multicolumn layout for images side by side */
+.reveal .slides section[data-state~="normal"] .content-center .multicolumn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    width: 100%;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .multicolumn img {
+    flex: 1;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* Tables in normal slides should be centered and sized like paragraphs */
+.reveal .slides section[data-state~="normal"] .content-center table {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2em;
+    border-color: var(--luiss-blue);
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table th {
+    background-color: var(--luiss-blue);
+    color: white;
+    font-weight: bold;
+    border-color: var(--luiss-blue);
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table th:not(:last-child) {
+    border-right: 0.1ch solid var(--luiss-blue);
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table td {
+    border-color: var(--luiss-blue);
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table td:not(:last-child) {
+    border-right: 0.1ch solid var(--luiss-blue);
+}
+
+/* Remove top border from first row when there's no header */
+.reveal .slides section[data-state~="normal"] .content-center table tr:first-child td {
+    border-top: none;
+}
+
+/* Footnotes styling */
+.reveal .slides section[data-state~="normal"] .footnotes {
+    position: absolute;
+    bottom: 20px;
+    left: 20%;
+    right: 5%;
+    font-size: 0.6em;
+    color: var(--luiss-blue);
+    text-align: left;
+    line-height: 1.3;
+}
+
+.reveal .slides section[data-state~="normal"] .footnotes p {
+    margin: 0.2em 0 !important;
+    font-size: 1em !important;
+    text-indent: -0.5em !important;
+    padding-left: 1em !important;
+}
+
+/* Math blocks in normal slides should be centered */
+.reveal .slides section[data-state~="normal"] .content-center {
+    --math-align: center;
+    text-align: left;
+}
+
+/* KaTeX display math - direct child of content-center */
+.reveal .slides section[data-state~="normal"] .content-center > .katex-display {
+    text-align: center !important;
+    margin: 0.5em auto !important;
+    display: block !important;
+}
+
+/* KaTeX display math - inside paragraph */
+.reveal .slides section[data-state~="normal"] .content-center p .katex-display {
+    text-align: center !important;
+    margin: 0.0em auto !important;
+    display: block !important;
+}
+
+/* Paragraphs containing ONLY KaTeX display math should be centered */
+.reveal .slides section[data-state~="normal"] .content-center p:has(> .katex-display) {
+    text-align: center !important;
+}
+
+/* MathJax */
+.reveal .slides section[data-state~="normal"] .content-center div.MathJax_Display,
+.reveal .slides section[data-state~="normal"] .content-center .MathJax_Display,
+.reveal .slides section[data-state~="normal"] .content-center mjx-container[display="true"] {
+    text-align: center !important;
+    display: block !important;
+    margin: 1em auto !important;
+}
+
+.slide-number-delimiter,
+.slide-number-b {
+    display: none !important;
+}
+
+.normal .controls {
+  display: none !important;
+}
+
+
+/* Nascondi il numero di slide predefinito */
+.reveal .slide-number {
+    display: none !important;
+}
+
+/* Crea un numero personalizzato per ogni slide */
+.reveal .slides section::after {
+    content: attr(data-slide-number);
+    position: absolute;
+    bottom: 30px;
+    right: 2.5%;
+    font-family: 'LUISS', 'Arial', sans-serif;
+    font-size: 2.2rem;
+    font-weight: normal;
+    color: var(--luiss-blue);
+    z-index: 10;
+}
+
+/* Nascondi su slide che hanno hide-controls */
+.reveal .slides section[data-state~="hide-controls"]::after {
+    display: none;
+}
+
+/* Dynamic font size classes based on content length - only apply to paragraphs and top-level lists */
+.reveal .slides section[data-state~="normal"].font-small .content-center > p,
+.reveal .slides section[data-state~="normal"].font-small .content-center > ul,
+.reveal .slides section[data-state~="normal"].font-small .content-center > ol,
+.reveal .slides section[data-state~="normal"].font-small .content-center > pre,
+.reveal .slides section[data-state~="normal"].font-small .content-center > table,
+.reveal .slides section[data-state~="normal"].font-small .content-center .col > p,
+.reveal .slides section[data-state~="normal"].font-small .content-center .col > ul,
+.reveal .slides section[data-state~="normal"].font-small .content-center .col > ol,
+.reveal .slides section[data-state~="normal"].font-small .content-center .col > pre,
+.reveal .slides section[data-state~="normal"].font-small .content-center .col > table {
+    font-size: 0.85em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smaller .content-center > p,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center > ul,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center > ol,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center > pre,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center > table,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center .col > p,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center .col > ul,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center .col > ol,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center .col > pre,
+.reveal .slides section[data-state~="normal"].font-smaller .content-center .col > table {
+    font-size: 0.8em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smallest .content-center > p,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center > ul,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center > ol,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center > pre,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center > table,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center .col > p,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center .col > ul,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center .col > ol,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center .col > pre,
+.reveal .slides section[data-state~="normal"].font-smallest .content-center .col > table {
+    font-size: 0.75em !important;
+}
+
+/* Ensure font-small applies to list items inside columns */
+.reveal .slides section[data-state~="normal"].font-small .content-center .col li {
+    font-size: inherit !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smaller .content-center .col li {
+    font-size: inherit !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smallest .content-center .col li {
+    font-size: inherit !important;
+}
+
+/* Code blocks inside pre should maintain consistent size with lists */
+.reveal .slides section[data-state~="normal"].font-small .content-center pre code {
+    font-size: 0.85em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smaller .content-center pre code {
+    font-size: 0.80em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smallest .content-center pre code {
+    font-size: 0.75em !important;
+}
+
+/* Nested list font size reduction for normal slides */
+.reveal .slides section[data-state~="normal"] .content-center ul,
+.reveal .slides section[data-state~="normal"] .content-center ol {
+    margin-top: 0 !important;
+    margin-bottom: 0.3em !important;
+    padding-left: 1.5ch !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center li {
+    margin-left: 1.5ch !important;
+    margin-bottom: 0.2em !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center ul ul,
+.reveal .slides section[data-state~="normal"] .content-center ol ul,
+.reveal .slides section[data-state~="normal"] .content-center ul ol,
+.reveal .slides section[data-state~="normal"] .content-center ol ol {
+    font-size: 0.80em !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-left: 1ch !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center ul ul li,
+.reveal .slides section[data-state~="normal"] .content-center ol ul li,
+.reveal .slides section[data-state~="normal"] .content-center ul ol li,
+.reveal .slides section[data-state~="normal"] .content-center ol ol li,
+.reveal .slides section[data-state~="normal"] .content-center li {
+    margin-left: 1.5ch !important;
+    margin-bottom: 0.2em !important;
+    line-height: 1.2 !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center ul ul ul,
+.reveal .slides section[data-state~="normal"] .content-center ol ul ul,
+.reveal .slides section[data-state~="normal"] .content-center ul ol ul,
+.reveal .slides section[data-state~="normal"] .content-center ol ol ul,
+.reveal .slides section[data-state~="normal"] .content-center ul ul ol,
+.reveal .slides section[data-state~="normal"] .content-center ol ul ol,
+.reveal .slides section[data-state~="normal"] .content-center ul ol ol,
+.reveal .slides section[data-state~="normal"] .content-center ol ol ol {
+    font-size: 0.8em !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-left: 0.8ch !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center ul ul ul li,
+.reveal .slides section[data-state~="normal"] .content-center ol ul ul li,
+.reveal .slides section[data-state~="normal"] .content-center ul ol ul li,
+.reveal .slides section[data-state~="normal"] .content-center ol ol ul li,
+.reveal .slides section[data-state~="normal"] .content-center ul ul ol li,
+.reveal .slides section[data-state~="normal"] .content-center ol ul ol li,
+.reveal .slides section[data-state~="normal"] .content-center ul ol ol li,
+.reveal .slides section[data-state~="normal"] .content-center ol ol ol li {
+    margin-left: 0.8ch !important;
+    margin-bottom: 0 !important;
+    line-height: 1.1 !important;
+}
+
+/* Ensure lists inside fragments have the same vertical spacing as normal lists */
+.reveal .slides section[data-state~="normal"] .content-center .fragment ul,
+.reveal .slides section[data-state~="normal"] .content-center .fragment ol {
+    margin-top: 0 !important;
+    /* Remove extra bottom margin so that the gap between
+       two fragment-wrapped lists is driven only by li margins,
+       matching the spacing between items inside a single list */
+    margin-bottom: 0 !important;
+}
+
+.katex-display {
+  display: block !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Center paragraphs that contain only katex-display */
+.reveal .slides section[data-state~="normal"] .content-center p:has(> span > .katex-display) {
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Print-pdf mode styles (when ?print-pdf is in URL) - applies when .pdf-page elements exist */
+/* These rules apply in print-pdf mode, not just when printing */
+
+/* Hide Reveal's inline background on .pdf-page and use our backgrounds instead */
+.pdf-page {
+  background: none !important;
+  background-image: none !important;
+}
+
+/* In print-pdf, also clear the Reveal slide background layer so only
+   .slide-background-content provides the background image */
+.pdf-page .slide-background {
+  background: none !important;
+  background-image: none !important;
+}
+
+/* Some themes put the front background on the body/viewport; clear it in
+   print-pdf so it doesn't show behind every pdf-page */
+html.reveal-print body.front,
+html.print-pdf body.front,
+body.reveal-print.front,
+body.print-pdf.front {
+  background: var(--hogent-black) !important;
+  background-image: none !important;
+}
+
+/* Apply backgrounds to the slide-background-content div instead */
+.pdf-page .slide-background-content {
+  background-image: url('../backgrounds/normal.png') !important;
+  background-position: 50% 50% !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-color: var(--hogent-black) !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.pdf-page:has(> section[data-state*="front"]) .slide-background-content {
+  background-image: url('../backgrounds/front.png') !important;
+}
+
+.pdf-page:has(> section[data-state*="break-blue"]) .slide-background-content {
+  background-image: url('../backgrounds/blue.png') !important;
+}
+
+.pdf-page:has(> section[data-state*="break-green"]) .slide-background-content {
+  background-image: url('../backgrounds/green.png') !important;
+}
+
+.pdf-page:has(> section[data-state*="toc-blue"]) .slide-background-content {
+  background-image: url('../backgrounds/blue.png') !important;
+}
+
+.pdf-page:has(> section[data-state*="normal"]) .slide-background-content {
+  background-image: url('../backgrounds/normal.png') !important;
+}
+
+/* Ensure slide content is above slide background in print-pdf view */
+.pdf-page .slide-background,
+.pdf-page .slide-background-content {
+  z-index: 0 !important;
+  display: block !important;
+}
+
+.pdf-page > section {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Generic slides (without specific data-state) - treat as normal slides */
+.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) {
+  color: var(--luiss-blue) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  height: 100% !important;
+  width: 100% !important;
+  padding-top: 20px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-top: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  position: absolute !important;
+}
+
+.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) h2 {
+  color: var(--luiss-blue) !important;
+  padding-left: 4.0% !important;
+  padding-right: 4.0% !important;
+  font-size: 1.1em !important;
+  font-weight: bold !important;
+  margin-top: 25px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) .content-center {
+  color: var(--luiss-blue) !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  padding-left: 4.0% !important;
+  padding-right: 4.0% !important;
+  padding-bottom: 110px !important;
+  margin-top: -20px !important;
+}
+
+.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) strong {
+  color: var(--luiss-blue) !important;
+}
+
+/* Place NORMAL slide content in print-pdf without overriding Reveal's centering */
+.pdf-page > section[data-state~="normal"] {
+  color: var(--luiss-blue) !important;
+  /* Let Reveal's print-pdf sizing handle positioning; only adjust padding/width */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  padding-top: 20px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-top: 0 !important;
+  position: relative !important;
+}
+
+.pdf-page > section[data-state~="normal"] h2 {
+  color: var(--luiss-blue) !important;
+  padding-left: 4.0% !important;
+  padding-right: 4.0% !important;
+  font-size: 1.0em !important;
+  font-weight: bold !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center {
+  color: var(--luiss-blue) !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  /* In print, keep content top-aligned and more compact */
+  justify-content: flex-start !important;
+  padding-left: 4.0% !important;
+  padding-right: 4.0% !important;
+  padding-bottom: 20px !important;
+  margin-top: 0 !important;
+}
+
+.pdf-page > section[data-state~="normal"] strong {
+  color: var(--luiss-blue) !important;
+}
+
+/* Break blue slide layout in print-pdf mode */
+.pdf-page > section[data-state*="break-blue"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.pdf-page > section[data-state*="break-blue"] h2 {
+  margin-top: -100px !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 2.7em !important;
+  padding-left: 2.5% !important;
+  padding-bottom: 0 !important;
+}
+
+.pdf-page > section[data-state*="break-blue"] p {
+  padding-top: 0 !important;
+  margin-top: -30px !important;
+  font-size: 1.8em !important;
+  padding-left: 2.5% !important;
+  color: white !important;
+}
+
+/* Break green slide layout in print-pdf mode */
+.pdf-page > section[data-state*="break-green"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.pdf-page > section[data-state*="break-green"] h2 {
+  margin-top: -100px !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 2.7em !important;
+  padding-left: 2.5% !important;
+  padding-bottom: 0 !important;
+}
+
+.pdf-page > section[data-state*="break-green"] p {
+  padding-top: 0 !important;
+  margin-top: -30px !important;
+  font-size: 1.8em !important;
+  padding-left: 2.5% !important;
+  color: white !important;
+}
+
+/* TOC blue slide layout in print-pdf mode */
+.pdf-page > section[data-state*="toc-blue"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.pdf-page > section[data-state*="toc-blue"] h2 {
+  margin-top: -100px !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 2.7em !important;
+  padding-left: 2.5% !important;
+  padding-bottom: 0 !important;
+}
+
+.pdf-page > section[data-state*="toc-blue"] p {
+  margin-top: -50px !important;
+  font-size: 1.6em !important;
+  padding-left: 2.5% !important;
+  font-weight: bold !important;
+  color: white !important;
+}
+
+.pdf-page > section[data-state*="toc-blue"] ol {
+  font-weight: normal !important;
+  padding-top: 20px !important;
+}
+
+.pdf-page > section[data-state*="toc-blue"] li {
+  font-size: 1.3em !important;
+  font-weight: normal !important;
+  margin-left: 2.55% !important;
+  padding-bottom: 20px !important;
+  color: white !important;
+}
+
+.pdf-page > section[data-state*="toc-blue"] strong {
+  color: white !important;
+}
+
+/* Front slide text colors and layout in print-pdf mode */
+.pdf-page > section[data-state*="front"] #title,
+.pdf-page #title {
+  text-align: left !important;
+  margin-top: -50px !important;
+  padding-left: 2.2% !important;
+  padding-bottom: 15px !important;
+  font-size: 1.6em !important;
+  font-weight: bold !important;
+  color: var(--luiss-blue) !important;
+}
+
+.pdf-page > section[data-state*="front"] #title-2,
+.pdf-page #title-2 {
+  text-align: left !important;
+  padding-left: 2.2% !important;
+  font-size: 1.6em !important;
+  padding-bottom: 15px !important;
+  font-weight: bold !important;
+  color: var(--luiss-blue) !important;
+}
+
+.pdf-page > section[data-state*="front"] #subtitle,
+.pdf-page #subtitle {
+  text-align: left !important;
+  padding-left: 2.2% !important;
+  padding-bottom: 10px !important;
+  font-size: 1.5em !important;
+  color: var(--luiss-blue) !important;
+}
+
+.pdf-page > section[data-state*="front"] #subtitle-2,
+.pdf-page #subtitle-2 {
+  text-align: left !important;
+  padding-left: 2.2% !important;
+  padding-bottom: 10px !important;
+  font-size: 1.5em !important;
+  color: var(--luiss-blue) !important;
+}
+
+.pdf-page > section[data-state*="front"] #date,
+.pdf-page #date {
+  text-align: left !important;
+  padding-left: 2.25% !important;
+  padding-top: 3% !important;
+  font-size: 1.0em !important;
+  font-weight: bold !important;
+  color: var(--luiss-blue) !important;
+}
+
+/* Two column layout for normal slides in print-pdf mode */
+.pdf-page > section[data-state~="normal"] .content-center .columns-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 2em !important;
+  width: 100% !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .columns-container.columns-top {
+  align-items: flex-start !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .columns-container.columns-center {
+  align-items: center !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .col {
+  flex: 1 1 0% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .col[style*="width"] {
+  flex: 0 0 auto !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .col img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  /* Match on-screen behavior: keep column images well within slide height */
+  max-height: 55vh !important;
+}
+
+/* Font sizes for content in print-pdf mode */
+.pdf-page > section[data-state~="normal"] .content-center p {
+  margin: 0 !important;
+  margin-bottom: 0.3em !important;
+  font-size: 0.95em !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center > ul,
+.pdf-page > section[data-state~="normal"] .content-center > ol,
+.pdf-page > section[data-state~="normal"] .content-center .col > ul,
+.pdf-page > section[data-state~="normal"] .content-center .col > ol {
+  font-size: 0.95em !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .col p {
+  font-size: 0.95em !important;
+}
+
+/* In print-pdf, tighten vertical space around code blocks on normal slides */
+.pdf-page > section[data-state~="normal"] pre {
+  margin-top: 0.2em !important;
+  margin-bottom: 0.4em !important;
+}
+
+.pdf-page > section[data-state~="normal"] pre.code-output {
+  margin-top: 0.1em !important;
+  margin-bottom: 0.3em !important;
+}
+
+/* In print-pdf, use a smaller font and tighter padding for code so medium/long
+   code with output fits on a single slide */
+.pdf-page > section[data-state~="normal"] pre code:not(.mermaid),
+.pdf-page > section[data-state~="normal"] pre.code-output code {
+  font-size: 0.75em !important;
+  line-height: 1.1 !important;
+  padding-top: 0.4em !important;
+  padding-bottom: 0.4em !important;
+}
+
+/* In print-pdf, alerts on normal slides should be more compact */
+.pdf-page > section[data-state~="normal"] .alert {
+  font-size: 0.8em !important;
+  margin-top: 0.15em !important;
+  margin-bottom: 0.15em !important;
+  padding-top: 0.5em !important;
+  padding-bottom: 0.3em !important;
+}
+
+/* Table styling in print-pdf mode */
+.pdf-page > section[data-state~="normal"] .content-center table th {
+  background-color: var(--luiss-blue) !important;
+  color: white !important;
+  border-color: var(--luiss-blue) !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table td {
+  border-color: var(--luiss-blue) !important;
+}
+
+/* Ensure code blocks are visible in print-pdf mode */
+.pdf-page pre code:not(.mermaid) {
+  background-color: var(--code-bg-color) !important;
+  border-color: var(--code-border-color) !important;
+}
+
+.pdf-page pre.code-output code {
+  background-color: white !important;
+  border-color: #cccccc !important;
+}
+
+/* Alert boxes in print-pdf mode */
+.pdf-page .alert-warning {
+  background-color: #fff3cd !important;
+  border-color: #ffc107 !important;
+  color: #856404 !important;
+}
+
+.pdf-page .alert-note {
+  background-color: #d1ecf1 !important;
+  border-color: #17a2b8 !important;
+  color: #0c5460 !important;
+}
+
+.pdf-page .alert-hint {
+  background-color: #d4edda !important;
+  border-color: #28a745 !important;
+  color: #155724 !important;
+}
+
+.pdf-page .alert-recall {
+  background-color: #cce5ff !important;
+  border-color: #004085 !important;
+  color: #004085 !important;
+}
+
+/* Ensure slide numbers are visible in print-pdf mode */
+.pdf-page > section::after {
+  color: var(--luiss-blue) !important;
+  right: 4.5% !important;
+  bottom: 40px !important;
+}
+
+/* Hide controls and progress in print-pdf mode */
+body.print-pdf .reveal .progress,
+body.print-pdf .reveal .controls,
+.pdf-page ~ .reveal .progress,
+.pdf-page ~ .reveal .controls {
+  display: none !important;
+}
+
+/* Print-specific styles for PDF export */
+/* Ensure browser print dialog uses slide aspect with no margins */
+@page {
+  size: landscape;
+  margin: 0;
+}
+
+@media print {
+  /* Force colors and backgrounds in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Fix body background for print */
+  body {
+    background-color: var(--hogent-black) !important;
+  }
+  
+  /* Progress bar should be hidden in print */
+  .reveal .progress {
+    display: none !important;
+  }
+  
+  /* Controls should be hidden in print */
+  .reveal .controls {
+    display: none !important;
+  }
+}
