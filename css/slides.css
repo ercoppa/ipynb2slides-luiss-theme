@@ -66,6 +66,8 @@ section.has-dark-background h6 {
     --content-padding-bottom: 0.5em;
 
     --math-align: center;
+    --math-inline-font-scale: 0.9;
+    --math-display-font-scale: 1.2;
 
     --smaller-font-size: 2.6rem;
 
@@ -265,6 +267,25 @@ pre.code-output + .fragment {
 	margin-right: auto !important;
 }
 
+/* Ensure tables inside centered cells actually render centered (tables are block-level and
+   may be styled as full-width by reveal/markdown defaults) */
+.cell-center table {
+	width: auto !important;
+	max-width: 100% !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+/* Stronger rule: when a table is the direct child of a centered cell, force shrink-to-fit
+   and self-centering to prevent any higher-specificity Reveal defaults from stretching it */
+.reveal .slides section .cell-center > table {
+	width: fit-content !important;
+	max-width: 100% !important;
+	align-self: center !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
 /* Limit image size inside tables so they don't blow up row height */
 .content-center table img {
 	max-height: 40vh;
@@ -288,7 +309,7 @@ pre.code-output + .fragment {
 
 /* In normal slides, ensure fragments inside content-center span full width so
    alerts inside them have the same width as other alerts */
-.reveal .slides section[data-state~="normal"] .content-center .fragment {
+.reveal .slides section[data-state~="normal"] .content-center > .fragment {
     width: 100% !important;
     align-self: stretch !important;
 }
@@ -308,6 +329,19 @@ pre.code-output + .fragment {
 /* Alerts inside fragments in normal slides should match the full-width alerts */
 .reveal .slides section[data-state~="normal"] .content-center .fragment .alert {
     width: 100% !important;
+}
+
+/* Padding wrappers produced by nb2md should not shrink inside flex containers */
+.reveal .slides section[data-state~="normal"] .content-center > div[style*="padding"] {
+    width: 100% !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .col > div[style*="padding"] {
+    width: 100% !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
 }
 
 .alert b {
@@ -342,6 +376,12 @@ pre.code-output + .fragment {
     color: #004085 !important;
 }
 
+.alert-error {
+    background-color: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
+}
+
 p {
     line-height: var(--content-line-height);
     margin-bottom: var(--content-padding-bottom);
@@ -364,6 +404,7 @@ video,
 iframe {
     max-width: 100%; /* Must be % because of multicolumn, as those are sub-divs */
     max-height: 90vh;
+    height: auto; /* Maintain aspect ratio */
     margin-bottom: var(--content-padding-bottom);
 }
 
@@ -400,6 +441,23 @@ pre code.fragment.current-fragment[data-line-numbers] {
 div.MathJax_Display {
     text-align: var(--math-align) !important;
     margin-bottom: var(--content-padding-bottom);
+}
+
+.reveal .katex,
+.reveal .MathJax,
+.reveal mjx-container:not([display="true"]) {
+    font-size: calc(var(--math-inline-font-scale) * 1em) !important;
+}
+
+.reveal .katex-display,
+.reveal .MathJax_Display,
+.reveal mjx-container[display="true"] {
+    font-size: calc(var(--math-display-font-scale) * 1em) !important;
+}
+
+.reveal .katex,
+.reveal mjx-container:not([display="true"]) {
+    line-height: 1.0 !important;
 }
 
 table {
@@ -557,20 +615,38 @@ div.multicolumn {
 
 .break-green {
     color: white;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    height: 100% !important;
+}
+
+.break-green h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 2.0em;
+    padding-left: 2.5%;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
 }
 
 .break-green h2 {
-    margin-top: -100px;
     color: white;
     font-weight: bold;
-    font-size: 2.7em;
+    font-size: 2.0em;
     padding-left: 2.5%;
     padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
 }
 
 .break-green p {
     padding-top: 0;
-    margin-top: -30px;
+    margin-top: 0.3em;
     font-size: 1.8em;
     padding-left: 2.5%;
 }
@@ -584,20 +660,38 @@ div.multicolumn {
 
 .break-blue {
     color: white;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    height: 100% !important;
+}
+
+.break-blue h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 2.0em;
+    padding-left: 2.5%;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
 }
 
 .break-blue h2 {
-    margin-top: -100px;
     color: white;
     font-weight: bold;
-    font-size: 2.7em;
+    font-size: 2.0em;
     padding-left: 2.5%;
     padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
 }
 
 .break-blue p {
     padding-top: 0;
-    margin-top: -30px;
+    margin-top: 0.3em;
     font-size: 1.8em;
     padding-left: 2.5%;
 }
@@ -632,12 +726,13 @@ div.multicolumn {
 .toc-blue ol {
     font-weight: normal;
     padding-top: 20px;
+    margin-left: 2.5%;
 }
 
 .toc-blue li {
     font-size: 1.3em;
     font-weight: normal;
-    margin-left: 2.55%;
+    margin-left: 1.75%;
     padding-bottom: 20px;
 }
 
@@ -724,16 +819,88 @@ body.normal .reveal .slides section strong {
     flex-direction: row !important;
     gap: 2em !important;
     width: 100% !important;
+    align-items: stretch !important;
+}
+
+/* Tighten spacing around columns blocks */
+.reveal .slides section[data-state~="normal"] .content-center .columns-container img {
+    margin-bottom: 0 !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .columns-container + p,
+.reveal .slides section[data-state~="normal"] .content-center .columns-container + ul,
+.reveal .slides section[data-state~="normal"] .content-center .columns-container + ol {
+    margin-top: 0 !important;
 }
 
 /* Top-aligned columns */
 .reveal .slides section[data-state~="normal"] .content-center .columns-container.columns-top {
-    align-items: flex-start !important;
+    align-items: stretch !important;
 }
 
 /* Center-aligned columns (default) */
 .reveal .slides section[data-state~="normal"] .content-center .columns-container.columns-center {
-    align-items: center !important;
+    align-items: stretch !important;
+}
+
+/* Table-based columns for row alignment */
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 0 !important;
+    border-spacing: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 0.95em !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns * {
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns tbody {
+    border: 0 !important;
+    background: transparent !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns tr {
+    border: 0 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns td {
+    border: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    padding: 0.3em 0 !important;
+    padding-right: 1em !important;
+    vertical-align: middle !important;
+    background: transparent !important;
+    font-size: inherit !important;
+    text-indent: 0 !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns td .bullet {
+    display: inline !important;
+    margin-right: 0.3em !important;
+    font-weight: normal !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns.table-columns-top td {
+    vertical-align: top !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center table.table-columns.table-columns-center td {
+    vertical-align: middle !important;
 }
 
 .reveal .slides section[data-state~="normal"] .content-center .col {
@@ -742,6 +909,14 @@ body.normal .reveal .slides section strong {
     flex-direction: column !important;
     justify-content: center !important;
     min-width: 0 !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .columns-container.columns-top > .col {
+    justify-content: flex-start !important;
+}
+
+.reveal .slides section[data-state~="normal"] .content-center .columns-container.columns-center > .col {
+    justify-content: center !important;
 }
 
 .reveal .slides section[data-state~="normal"] .content-center .col[style*="width"] {
@@ -809,11 +984,17 @@ body.normal .reveal .slides section strong {
     line-height: inherit !important;
 }
 
-/* Images in normal slides should be centered */
+/* Images in normal slides should be centered and maintain aspect ratio */
 .reveal .slides section[data-state~="normal"] .content-center img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
 }
 
 /* Multicolumn layout for images side by side */
@@ -950,6 +1131,27 @@ body.normal .reveal .slides section strong {
 }
 
 /* Dynamic font size classes based on content length - only apply to paragraphs and top-level lists */
+/* Never scale the slide title (h2). Scale only the content area. */
+.reveal .slides section[data-state~="normal"].font-small .content-center {
+    font-size: 0.90em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smaller .content-center {
+    font-size: 0.85em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-smallest .content-center {
+    font-size: 0.80em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tinier .content-center {
+    font-size: 0.78em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center {
+    font-size: 0.72em !important;
+}
+
 .reveal .slides section[data-state~="normal"].font-small .content-center > p,
 .reveal .slides section[data-state~="normal"].font-small .content-center > ul,
 .reveal .slides section[data-state~="normal"].font-small .content-center > ol,
@@ -960,7 +1162,7 @@ body.normal .reveal .slides section strong {
 .reveal .slides section[data-state~="normal"].font-small .content-center .col > ol,
 .reveal .slides section[data-state~="normal"].font-small .content-center .col > pre,
 .reveal .slides section[data-state~="normal"].font-small .content-center .col > table {
-    font-size: 0.85em !important;
+    font-size: inherit !important;
 }
 
 .reveal .slides section[data-state~="normal"].font-smaller .content-center > p,
@@ -973,7 +1175,7 @@ body.normal .reveal .slides section strong {
 .reveal .slides section[data-state~="normal"].font-smaller .content-center .col > ol,
 .reveal .slides section[data-state~="normal"].font-smaller .content-center .col > pre,
 .reveal .slides section[data-state~="normal"].font-smaller .content-center .col > table {
-    font-size: 0.8em !important;
+    font-size: inherit !important;
 }
 
 .reveal .slides section[data-state~="normal"].font-smallest .content-center > p,
@@ -986,7 +1188,33 @@ body.normal .reveal .slides section strong {
 .reveal .slides section[data-state~="normal"].font-smallest .content-center .col > ol,
 .reveal .slides section[data-state~="normal"].font-smallest .content-center .col > pre,
 .reveal .slides section[data-state~="normal"].font-smallest .content-center .col > table {
-    font-size: 0.75em !important;
+    font-size: inherit !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tinier .content-center > p,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center > ul,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center > ol,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center > pre,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center > table,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center .col > p,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center .col > ul,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center .col > ol,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center .col > pre,
+.reveal .slides section[data-state~="normal"].font-tinier .content-center .col > table {
+    font-size: inherit !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center > p,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center > ul,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center > ol,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center > pre,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center > table,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center .col > p,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center .col > ul,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center .col > ol,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center .col > pre,
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center .col > table {
+    font-size: inherit !important;
 }
 
 /* Ensure font-small applies to list items inside columns */
@@ -1002,6 +1230,14 @@ body.normal .reveal .slides section strong {
     font-size: inherit !important;
 }
 
+.reveal .slides section[data-state~="normal"].font-tinier .content-center .col li {
+    font-size: inherit !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center .col li {
+    font-size: inherit !important;
+}
+
 /* Code blocks inside pre should maintain consistent size with lists */
 .reveal .slides section[data-state~="normal"].font-small .content-center pre code {
     font-size: 0.85em !important;
@@ -1013,6 +1249,35 @@ body.normal .reveal .slides section strong {
 
 .reveal .slides section[data-state~="normal"].font-smallest .content-center pre code {
     font-size: 0.75em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tinier .content-center pre code {
+    font-size: 0.72em !important;
+}
+
+.reveal .slides section[data-state~="normal"].font-tiniest .content-center pre code {
+    font-size: 0.68em !important;
+}
+
+/* Print-pdf clones */
+.pdf-page > section[data-state~="normal"].font-small .content-center {
+    font-size: 0.90em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-smaller .content-center {
+    font-size: 0.85em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-smallest .content-center {
+    font-size: 0.80em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-tinier .content-center {
+    font-size: 0.78em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-tiniest .content-center {
+    font-size: 0.72em !important;
 }
 
 /* Nested list font size reduction for normal slides */
@@ -1273,13 +1538,24 @@ body.print-pdf.front {
   justify-content: flex-start !important;
 }
 
-.pdf-page > section[data-state*="break-blue"] h2 {
-  margin-top: -100px !important;
+.pdf-page > section[data-state*="break-blue"] h1 {
+  margin-top: 0px !important;
   color: white !important;
   font-weight: bold !important;
-  font-size: 2.7em !important;
+  font-size: 2.0em !important;
   padding-left: 2.5% !important;
   padding-bottom: 0 !important;
+  text-align: left !important;
+}
+
+.pdf-page > section[data-state*="break-blue"] h2 {
+  margin-top: 0px !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 2.0em !important;
+  padding-left: 2.5% !important;
+  padding-bottom: 0 !important;
+  text-align: left !important;
 }
 
 .pdf-page > section[data-state*="break-blue"] p {
@@ -1302,11 +1578,20 @@ body.print-pdf.front {
   justify-content: flex-start !important;
 }
 
-.pdf-page > section[data-state*="break-green"] h2 {
-  margin-top: -100px !important;
+.pdf-page > section[data-state*="break-green"] h1 {
+  margin-top: 0px !important;
   color: white !important;
   font-weight: bold !important;
-  font-size: 2.7em !important;
+  font-size: 2.0em !important;
+  padding-left: 2.5% !important;
+  padding-bottom: 0 !important;
+}
+
+.pdf-page > section[data-state*="break-green"] h2 {
+  margin-top: 0px !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 2.0em !important;
   padding-left: 2.5% !important;
   padding-bottom: 0 !important;
 }
@@ -1351,12 +1636,14 @@ body.print-pdf.front {
 .pdf-page > section[data-state*="toc-blue"] ol {
   font-weight: normal !important;
   padding-top: 20px !important;
+  padding-left: 0 !important;
+  margin-left: 2.5% !important;
 }
 
 .pdf-page > section[data-state*="toc-blue"] li {
   font-size: 1.3em !important;
   font-weight: normal !important;
-  margin-left: 2.55% !important;
+  margin-left: 1.5em !important;
   padding-bottom: 20px !important;
   color: white !important;
 }
@@ -1421,14 +1708,99 @@ body.print-pdf.front {
   flex-direction: row !important;
   gap: 2em !important;
   width: 100% !important;
+  align-items: stretch !important;
+}
+
+/* Tighten spacing around columns blocks in print */
+.pdf-page > section[data-state~="normal"] .content-center .columns-container img {
+  margin-bottom: 0 !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .columns-container + p,
+.pdf-page > section[data-state~="normal"] .content-center .columns-container + ul,
+.pdf-page > section[data-state~="normal"] .content-center .columns-container + ol {
+  margin-top: 0 !important;
+}
+
+/* Padding wrappers produced by nb2md should not shrink inside flex containers (print) */
+.pdf-page > section[data-state~="normal"] .content-center > div[style*="padding"] {
+  width: 100% !important;
+  align-self: stretch !important;
+  box-sizing: border-box !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .col > div[style*="padding"] {
+  width: 100% !important;
+  align-self: stretch !important;
+  box-sizing: border-box !important;
 }
 
 .pdf-page > section[data-state~="normal"] .content-center .columns-container.columns-top {
-  align-items: flex-start !important;
+  align-items: stretch !important;
 }
 
 .pdf-page > section[data-state~="normal"] .content-center .columns-container.columns-center {
-  align-items: center !important;
+  align-items: stretch !important;
+}
+
+/* Table-based columns for row alignment in print-pdf mode */
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border: 0 !important;
+  border-spacing: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  font-size: 0.95em !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns * {
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns tbody {
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns tr {
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns td {
+  border: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  padding: 0.3em 0 !important;
+  padding-right: 1em !important;
+  vertical-align: middle !important;
+  background: transparent !important;
+  font-size: inherit !important;
+  text-indent: 0 !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns td .bullet {
+  display: inline !important;
+  margin-right: 0.3em !important;
+  font-weight: normal !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns.table-columns-top td {
+  vertical-align: top !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center table.table-columns.table-columns-center td {
+  vertical-align: middle !important;
 }
 
 .pdf-page > section[data-state~="normal"] .content-center .col {
@@ -1437,6 +1809,14 @@ body.print-pdf.front {
   flex-direction: column !important;
   justify-content: center !important;
   min-width: 0 !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .columns-container.columns-top > .col {
+  justify-content: flex-start !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center .columns-container.columns-center > .col {
+  justify-content: center !important;
 }
 
 .pdf-page > section[data-state~="normal"] .content-center .col[style*="width"] {
@@ -1544,6 +1924,12 @@ body.print-pdf.front {
   background-color: #cce5ff !important;
   border-color: #004085 !important;
   color: #004085 !important;
+}
+
+.pdf-page .alert-error {
+  background-color: #f8d7da !important;
+  border-color: #dc3545 !important;
+  color: #721c24 !important;
 }
 
 /* Ensure slide numbers are visible in print-pdf mode */
