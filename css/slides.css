@@ -400,11 +400,16 @@ blockquote {
 }
 
 img,
-video,
-iframe {
+video {
     max-width: 100%; /* Must be % because of multicolumn, as those are sub-divs */
     max-height: 90vh;
     height: auto; /* Maintain aspect ratio */
+    margin-bottom: var(--content-padding-bottom);
+}
+
+iframe {
+    max-width: 100%;
+    max-height: 90vh;
     margin-bottom: var(--content-padding-bottom);
 }
 
@@ -989,8 +994,8 @@ body.normal .reveal .slides section strong {
     display: block !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    height: auto !important;
-    max-height: none !important;
+    height: auto;
+    max-height: none;
     flex-shrink: 0 !important;
     align-self: center !important;
     object-fit: contain !important;
