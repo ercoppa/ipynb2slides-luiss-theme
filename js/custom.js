@@ -8,9 +8,10 @@ Reveal.on('ready', function() {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             centerMathBlocks();
+            startResizeCycleForCurrentSlide();
             adjustFontSizeForCurrentSlide();
-            // Avoid measuring hidden slides at startup: non-visible sections can report
-            // misleading rects and end up with incorrect font classes.
+            setTimeout(adjustFontSizeForCurrentSlide, 150);
+            setTimeout(adjustFontSizeForCurrentSlide, 500);
             if (document.body.classList.contains('print-pdf')) {
                 adjustFontSizeForAllSlides();
             }
@@ -57,13 +58,26 @@ Reveal.on('slidechanged', function() {
     // Re-adjust on slide change (in case of dynamic content)
     // Only measure the visible slide: hidden slides can report different heights
     // and overwrite classes with incorrect values.
+    startResizeCycleForCurrentSlide();
     adjustFontSizeForCurrentSlide();
+    setTimeout(adjustFontSizeForCurrentSlide, 150);
+    setTimeout(adjustFontSizeForCurrentSlide, 500);
     
     // Sync body class for default slides on navigation
     syncBodyClassWithCurrentSlide();
     // Center math blocks on slide change
     setTimeout(centerMathBlocks, 50);
 });
+
+function startResizeCycleForCurrentSlide() {
+    const current = Reveal.getCurrentSlide();
+    if (!current) return;
+
+    // Reset monotonic selection for this slide so repeated measurements after navigation
+    // cannot oscillate between font classes as math/layout settles.
+    current.__fontResizeMaxRank = 0;
+    current.__fontResizeMaxClass = 'none';
+}
 
 function adjustFontSizeForCurrentSlide() {
     const current = Reveal.getCurrentSlide();
@@ -122,73 +136,73 @@ function adjustFontSizeForSection(section) {
             katexElements.forEach(el => el.offsetHeight);
         }
         
-        // Calculate actual content height using direct children of content-center
-        // This includes wrapper divs that contain images
-        const directChildren = Array.from(contentDiv.children).filter(child => {
-            // Filter out BR tags and empty elements
-            return child.tagName !== 'BR' && child.getBoundingClientRect().height > 0;
+        // Calculate content height.
+        // IMPORTANT: .content-center is a flex container with a fixed available height.
+        // Measuring children via getBoundingClientRect can undercount when content is
+        // constrained/centered. Instead:
+        // 1) capture the original available height
+        // 2) temporarily remove constraints (so the element can grow)
+        // 3) read scrollHeight as the natural content height
+        // 4) restore styles
+        //
+        // First, temporarily show all fragments (if any) to get accurate measurements.
+        const fragments = section.querySelectorAll('.fragment');
+        const fragmentStates = [];
+        fragments.forEach(frag => {
+            fragmentStates.push({
+                element: frag,
+                wasVisible: frag.classList.contains('visible'),
+                display: frag.style.display
+            });
+            frag.classList.add('visible');
+            frag.style.display = '';
         });
         
-        let contentHeight = 0;
+        // Force reflow
+        contentDiv.offsetHeight;
 
-        // Measure in the same coordinate system Reveal renders in:
-        // getBoundingClientRect() returns *scaled* pixels when Reveal applies transforms.
-        // Using rects for both content and container keeps the ratio stable and avoids
-        // confusing "Available" values (e.g. >1080p) caused by mixing with clientHeight.
-        const contentDivRect = contentDiv.getBoundingClientRect();
-        const availableHeight = contentDivRect.height;
-        const availableWidth = contentDivRect.width;
+        const rects = [];
+        const range = document.createRange();
+        range.selectNodeContents(contentDiv);
+        rects.push(...Array.from(range.getClientRects()));
 
-        if (directChildren.length > 0) {
-            // Check for images and their constraints
-            const imgs = contentDiv.querySelectorAll('img');
-            imgs.forEach(img => {
-                const rect = img.getBoundingClientRect();
-                const computedStyle = window.getComputedStyle(img);
-                const sectionRect = section.getBoundingClientRect();
-                const contentRect = contentDiv.getBoundingClientRect();
-                
-                console.log(`  -> Section width: ${sectionRect.width.toFixed(1)}px, content-center width: ${contentRect.width.toFixed(1)}px`);
-                console.log(`  -> IMG inline width: ${img.style.width}, computed width: ${computedStyle.width}, actual: ${rect.width.toFixed(1)}px`);
-                console.log(`  -> IMG computed max-width: ${computedStyle.maxWidth}, max-height: ${computedStyle.maxHeight}`);
-                console.log(`  -> IMG transform: ${computedStyle.transform}`);
-                
-                // Check if Reveal.js is scaling the slide
-                const revealScale = Reveal.getScale();
-                console.log(`  -> Reveal.js scale: ${revealScale}`);
-            });
-            
-            // Get all child rectangles
-            const rects = directChildren.map((child, i) => {
-                const rect = child.getBoundingClientRect();
-                console.log(`  -> Direct child ${i} (${child.tagName}): height=${rect.height.toFixed(1)}px, top=${rect.top.toFixed(1)}, bottom=${rect.bottom.toFixed(1)}`);
-                return rect;
-            });
-            
-            // Find topmost and bottommost positions across all content elements
-            const topMost = Math.min(...rects.map(r => r.top));
-            const bottomMost = Math.max(...rects.map(r => r.bottom));
-            
-            // Content height is the span from top to bottom (scaled pixels)
-            contentHeight = bottomMost - topMost;
-
-            console.log(`  -> Measured ${directChildren.length} direct children, bounding box: top=${topMost.toFixed(1)}, bottom=${bottomMost.toFixed(1)}, span=${contentHeight.toFixed(1)}`);
+        const footnotes = section.querySelector('.footnotes');
+        if (footnotes) {
+            const footRange = document.createRange();
+            footRange.selectNodeContents(footnotes);
+            rects.push(...Array.from(footRange.getClientRects()));
         }
 
-        const heightRatio = availableHeight > 0 ? (contentHeight / availableHeight) : 0;
+        const visibleRects = rects.filter(r => r.height > 0 && r.width > 0);
+        const contentTop = contentDiv.getBoundingClientRect().top;
+        const sectionBottom = section.getBoundingClientRect().bottom;
 
-        // Debug helpers: show both scaled and unscaled sizes.
-        // Rects are in *scaled* pixels when Reveal applies transforms.
-        // Dividing by Reveal.getScale() yields the slide coordinate system (e.g. 1920x1080).
-        const revealScale = Reveal.getScale ? Reveal.getScale() : 1;
-        const safeScale = revealScale || 1;
-        const contentHeightUnscaled = contentHeight / safeScale;
-        const availableHeightUnscaled = availableHeight / safeScale;
+        let contentHeight = 0;
+        if (visibleRects.length > 0) {
+            const bottomMost = Math.max(...visibleRects.map(r => r.bottom));
+            contentHeight = bottomMost - contentTop;
+        }
+
+        const availableHeight = sectionBottom - contentTop;
+        
+        // Restore fragment states
+        fragmentStates.forEach(state => {
+            if (!state.wasVisible) {
+                state.element.classList.remove('visible');
+            }
+            if (state.display) {
+                state.element.style.display = state.display;
+            }
+        });
+
+        // Force reflow
+        contentDiv.offsetHeight;
+
+        const heightRatio = availableHeight > 0 ? (contentHeight / availableHeight) : 0;
         
         const h2Any = section.querySelector('h2');
         const h2Text = h2Any ? h2Any.textContent : '(no h2)';
         console.log('Slide:', h2Text, '| Content:', contentHeight.toFixed(1), '| Available:', availableHeight.toFixed(1), '| Ratio:', heightRatio.toFixed(4));
-        console.log(`  -> Reveal scale: ${safeScale.toFixed(4)} | Content(unscaled): ${contentHeightUnscaled.toFixed(1)} | Available(unscaled): ${availableHeightUnscaled.toFixed(1)}`);
 
         let appliedClass = 'none';
         if (hasColumns) {
@@ -210,7 +224,7 @@ function adjustFontSizeForSection(section) {
                 });
                 // If images take significant space, boost the ratio
                 if (totalImageArea > 0) {
-                    const containerArea = availableHeight * availableWidth;
+                    const containerArea = availableHeight * contentDiv.clientWidth;
                     const imageRatio = totalImageArea / containerArea;
                     // Boost ratio based on image coverage
                     adjustedRatio = heightRatio + (imageRatio * 0.5);
@@ -218,119 +232,66 @@ function adjustFontSizeForSection(section) {
                 }
             }
             
-            if (hasCodeInColumns) {
-                // For columns with code: count actual content lines more accurately
-                const codeBlocks = contentDiv.querySelectorAll('.col pre code');
-                let maxLines = 0;
-                let totalContentLines = 0;
-                
-                codeBlocks.forEach(code => {
-                    const text = code.textContent || '';
-                    // Count non-empty lines
-                    const lines = text.split('\n').filter(line => line.trim().length > 0);
-                    const lineCount = lines.length;
-                    maxLines = Math.max(maxLines, lineCount);
-                    totalContentLines += lineCount;
-                    console.log('  -> Code block lines:', lineCount, 'chars:', text.length);
-                });
-                
-                // Also count list items and other content in columns
-                const listItems = contentDiv.querySelectorAll('.col li');
-                const listItemCount = listItems.length;
-                totalContentLines += listItemCount;
-                
-                console.log('  -> Total content lines in columns:', totalContentLines, 'max code lines:', maxLines, 'list items:', listItemCount);
-
-                // Don't shrink just because there's code in columns.
-                // Only reduce font when the slide is actually close to overflowing.
-                if (heightRatio <= 0.80) {
-                    appliedClass = 'none';
-                } else if (heightRatio <= 0.95) {
-                    section.classList.add('font-small');
-                    appliedClass = 'font-small';
-                } else if (heightRatio <= 1.05) {
-                    section.classList.add('font-smaller');
-                    appliedClass = 'font-smaller';
-                } else {
-                    // When we really are tight on space, fall back to the content-line heuristic
-                    // to keep column+code slides from overflowing.
-                    if (totalContentLines <= 3 && maxLines <= 2) {
-                        section.classList.add('font-smaller');
-                        appliedClass = 'font-smaller';
-                    } else if (totalContentLines <= 5 && maxLines <= 3) {
-                        section.classList.add('font-smallest');
-                        appliedClass = 'font-smallest';
-                    } else if (heightRatio <= 1.20) {
-                        section.classList.add('font-tinier');
-                        appliedClass = 'font-tinier';
-                    } else {
-                        section.classList.add('font-tiniest');
-                        appliedClass = 'font-tiniest';
-                    }
-                }
-            } else {
-                // Logic for columns without code - use adjustedRatio to account for images
-                if (adjustedRatio > 1.15) {
-                    section.classList.add('font-tiniest');
-                    appliedClass = 'font-tiniest';
-                } else if (adjustedRatio > 1.05) {
-                    section.classList.add('font-smallest');
-                    appliedClass = 'font-smallest';
-                } else if (adjustedRatio > 0.95) {
-                    section.classList.add('font-smaller');
-                    appliedClass = 'font-smaller';
-                } else if (adjustedRatio > 0.85) {
-                    section.classList.add('font-small');
-                    appliedClass = 'font-small';
-                }
+            if (adjustedRatio > 1.05) {
+                section.classList.add('font-tiniest');
+                appliedClass = 'font-tiniest';
+            } else if (adjustedRatio > 0.98) {
+                section.classList.add('font-tinier');
+                appliedClass = 'font-tinier';
+            } else if (adjustedRatio > 0.92) {
+                section.classList.add('font-smallest');
+                appliedClass = 'font-smallest';
+            } else if (adjustedRatio > 0.86) {
+                section.classList.add('font-smaller');
+                appliedClass = 'font-smaller';
+            } else if (adjustedRatio > 0.80) {
+                section.classList.add('font-small');
+                appliedClass = 'font-small';
             }
         } else {
-            // Non-column slides: ratio-based thresholds.
-            // Using rects makes this scale-invariant and avoids hardcoded pixel thresholds
-            // that break when the deck is scaled to fit the viewport.
-            const hasCodeBlocks = contentDiv.querySelector('pre, code') !== null;
+            // Non-column slides: use measured ratio (rendered content vs available box)
+            console.log('  -> Using ratio thresholds for non-column slide');
 
-            if (hasCodeBlocks) {
-                // Code slides tend to be visually dense even before they overflow,
-                // so start shrinking earlier than text-only slides.
-                if (heightRatio <= 0.80) {
-                    appliedClass = 'none';
-                } else if (heightRatio <= 0.85) {
-                    section.classList.add('font-small');
-                    appliedClass = 'font-small';
-                } else if (heightRatio <= 0.90) {
-                    section.classList.add('font-smaller');
-                    appliedClass = 'font-smaller';
-                } else if (heightRatio <= 0.95) {
-                    section.classList.add('font-smallest');
-                    appliedClass = 'font-smallest';
-                } else if (heightRatio <= 1.05) {
-                    section.classList.add('font-tinier');
-                    appliedClass = 'font-tinier';
-                } else {
-                    section.classList.add('font-tiniest');
-                    appliedClass = 'font-tiniest';
-                }
-            } else {
-                if (heightRatio <= 0.85) {
-                    appliedClass = 'none';
-                } else if (heightRatio <= 0.95) {
-                    section.classList.add('font-small');
-                    appliedClass = 'font-small';
-                } else if (heightRatio <= 1.05) {
-                    section.classList.add('font-smaller');
-                    appliedClass = 'font-smaller';
-                } else if (heightRatio <= 1.15) {
-                    section.classList.add('font-smallest');
-                    appliedClass = 'font-smallest';
-                } else if (heightRatio <= 1.25) {
-                    section.classList.add('font-tinier');
-                    appliedClass = 'font-tinier';
-                } else {
-                    section.classList.add('font-tiniest');
-                    appliedClass = 'font-tiniest';
-                }
+            if (heightRatio > 1.10) {
+                section.classList.add('font-tiniest');
+                appliedClass = 'font-tiniest';
+            } else if (heightRatio > 1.00) {
+                section.classList.add('font-tinier');
+                appliedClass = 'font-tinier';
+            } else if (heightRatio > 0.95) {
+                section.classList.add('font-smallest');
+                appliedClass = 'font-smallest';
+            } else if (heightRatio > 0.88) {
+                section.classList.add('font-smaller');
+                appliedClass = 'font-smaller';
+            } else if (heightRatio > 0.75) {
+                section.classList.add('font-small');
+                appliedClass = 'font-small';
             }
+            // heightRatio <= 0.75: keep normal font size
+        }
+
+        const rank = {
+            none: 0,
+            'font-small': 1,
+            'font-smaller': 2,
+            'font-smallest': 3,
+            'font-tinier': 4,
+            'font-tiniest': 5,
+        };
+        const desiredRank = rank[appliedClass] ?? 0;
+        const maxRank = section.__fontResizeMaxRank ?? 0;
+        const maxClass = section.__fontResizeMaxClass ?? 'none';
+
+        if (desiredRank > maxRank) {
+            section.__fontResizeMaxRank = desiredRank;
+            section.__fontResizeMaxClass = appliedClass;
+        } else if (desiredRank < maxRank) {
+            section.classList.remove('font-small', 'font-smaller', 'font-smallest', 'font-tinier', 'font-tiniest');
+            if (maxClass && maxClass !== 'none') {
+                section.classList.add(maxClass);
+            }
+            appliedClass = maxClass;
         }
 
         console.log('  -> Applied class:', appliedClass);

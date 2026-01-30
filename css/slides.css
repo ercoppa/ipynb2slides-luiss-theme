@@ -408,18 +408,9 @@ video {
 }
 
 iframe {
-  max-width: 100%;
-  margin-bottom: var(--content-padding-bottom);
-}
-
-/* If an explicit height attribute is provided, do not constrain it with vh-based max-height. */
-iframe[height] {
-  max-height: none;
-}
-
-/* Keep responsive max-height only for iframes without an explicit height. */
-iframe:not([height]) {
-  max-height: 90vh;
+    max-width: 100%; /* Must be % because of multicolumn, as those are sub-divs */
+    max-height: 90vh;
+    margin-bottom: var(--content-padding-bottom);
 }
 
 pre {
@@ -999,16 +990,28 @@ body.normal .reveal .slides section strong {
 }
 
 /* Images in normal slides should be centered and maintain aspect ratio */
-.reveal .slides section[data-state~="normal"] .content-center img {
+.reveal .slides section[data-state~="normal"] .content-center img:not([style*="height"]):not([style*="width"]) {
     display: block !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    height: auto;
-    max-height: none;
+    height: auto !important;
+    max-height: none !important;
     flex-shrink: 0 !important;
     align-self: center !important;
     object-fit: contain !important;
     max-width: 100% !important;
+}
+
+/* Images with inline height/width styles - let them control their own size */
+.reveal .slides section[data-state~="normal"] .content-center img[style*="height"],
+.reveal .slides section[data-state~="normal"] .content-center img[style*="width"] {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+    max-width: none !important;
+    max-height: none !important;
 }
 
 /* Multicolumn layout for images side by side */
