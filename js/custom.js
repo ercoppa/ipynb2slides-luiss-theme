@@ -9,7 +9,11 @@ Reveal.on('ready', function() {
         requestAnimationFrame(() => {
             centerMathBlocks();
             adjustFontSizeForCurrentSlide();
-            adjustFontSizeForAllSlides();
+            // Avoid measuring hidden slides at startup: non-visible sections can report
+            // misleading rects and end up with incorrect font classes.
+            if (document.body.classList.contains('print-pdf')) {
+                adjustFontSizeForAllSlides();
+            }
         });
     });
     
@@ -126,7 +130,15 @@ function adjustFontSizeForSection(section) {
         });
         
         let contentHeight = 0;
-        
+
+        // Measure in the same coordinate system Reveal renders in:
+        // getBoundingClientRect() returns *scaled* pixels when Reveal applies transforms.
+        // Using rects for both content and container keeps the ratio stable and avoids
+        // confusing "Available" values (e.g. >1080p) caused by mixing with clientHeight.
+        const contentDivRect = contentDiv.getBoundingClientRect();
+        const availableHeight = contentDivRect.height;
+        const availableWidth = contentDivRect.width;
+
         if (directChildren.length > 0) {
             // Check for images and their constraints
             const imgs = contentDiv.querySelectorAll('img');
@@ -157,27 +169,26 @@ function adjustFontSizeForSection(section) {
             const topMost = Math.min(...rects.map(r => r.top));
             const bottomMost = Math.max(...rects.map(r => r.bottom));
             
-            // Content height is the span from top to bottom
+            // Content height is the span from top to bottom (scaled pixels)
             contentHeight = bottomMost - topMost;
-            
-            // Reveal.js scales slides - we need unscaled dimensions
-            const revealScale = Reveal.getScale();
-            const unscaledContentHeight = contentHeight / revealScale;
-            const unscaledAvailableHeight = contentDiv.clientHeight / revealScale;
-            
+
             console.log(`  -> Measured ${directChildren.length} direct children, bounding box: top=${topMost.toFixed(1)}, bottom=${bottomMost.toFixed(1)}, span=${contentHeight.toFixed(1)}`);
-            console.log(`  -> Reveal scale: ${revealScale.toFixed(4)}, unscaled content: ${unscaledContentHeight.toFixed(1)}, unscaled available: ${unscaledAvailableHeight.toFixed(1)}`);
-            
-            // Use unscaled dimensions
-            contentHeight = unscaledContentHeight;
         }
-        
-        const availableHeight = contentDiv.clientHeight / Reveal.getScale();
-        const heightRatio = contentHeight / availableHeight;
+
+        const heightRatio = availableHeight > 0 ? (contentHeight / availableHeight) : 0;
+
+        // Debug helpers: show both scaled and unscaled sizes.
+        // Rects are in *scaled* pixels when Reveal applies transforms.
+        // Dividing by Reveal.getScale() yields the slide coordinate system (e.g. 1920x1080).
+        const revealScale = Reveal.getScale ? Reveal.getScale() : 1;
+        const safeScale = revealScale || 1;
+        const contentHeightUnscaled = contentHeight / safeScale;
+        const availableHeightUnscaled = availableHeight / safeScale;
         
         const h2Any = section.querySelector('h2');
         const h2Text = h2Any ? h2Any.textContent : '(no h2)';
         console.log('Slide:', h2Text, '| Content:', contentHeight.toFixed(1), '| Available:', availableHeight.toFixed(1), '| Ratio:', heightRatio.toFixed(4));
+        console.log(`  -> Reveal scale: ${safeScale.toFixed(4)} | Content(unscaled): ${contentHeightUnscaled.toFixed(1)} | Available(unscaled): ${availableHeightUnscaled.toFixed(1)}`);
 
         let appliedClass = 'none';
         if (hasColumns) {
@@ -199,7 +210,7 @@ function adjustFontSizeForSection(section) {
                 });
                 // If images take significant space, boost the ratio
                 if (totalImageArea > 0) {
-                    const containerArea = availableHeight * contentDiv.clientWidth;
+                    const containerArea = availableHeight * availableWidth;
                     const imageRatio = totalImageArea / containerArea;
                     // Boost ratio based on image coverage
                     adjustedRatio = heightRatio + (imageRatio * 0.5);
@@ -229,19 +240,33 @@ function adjustFontSizeForSection(section) {
                 totalContentLines += listItemCount;
                 
                 console.log('  -> Total content lines in columns:', totalContentLines, 'max code lines:', maxLines, 'list items:', listItemCount);
-                
-                // Apply aggressive font reduction for columns with code
-                // Base font is too large for column layouts with code - default to tiniest
-                if (totalContentLines <= 3 && maxLines <= 2) {
+
+                // Don't shrink just because there's code in columns.
+                // Only reduce font when the slide is actually close to overflowing.
+                if (heightRatio <= 0.80) {
+                    appliedClass = 'none';
+                } else if (heightRatio <= 0.95) {
+                    section.classList.add('font-small');
+                    appliedClass = 'font-small';
+                } else if (heightRatio <= 1.05) {
                     section.classList.add('font-smaller');
                     appliedClass = 'font-smaller';
-                } else if (totalContentLines <= 5 && maxLines <= 3) {
-                    section.classList.add('font-smallest');
-                    appliedClass = 'font-smallest';
                 } else {
-                    // For most cases with code in columns, use tiniest
-                    section.classList.add('font-tiniest');
-                    appliedClass = 'font-tiniest';
+                    // When we really are tight on space, fall back to the content-line heuristic
+                    // to keep column+code slides from overflowing.
+                    if (totalContentLines <= 3 && maxLines <= 2) {
+                        section.classList.add('font-smaller');
+                        appliedClass = 'font-smaller';
+                    } else if (totalContentLines <= 5 && maxLines <= 3) {
+                        section.classList.add('font-smallest');
+                        appliedClass = 'font-smallest';
+                    } else if (heightRatio <= 1.20) {
+                        section.classList.add('font-tinier');
+                        appliedClass = 'font-tinier';
+                    } else {
+                        section.classList.add('font-tiniest');
+                        appliedClass = 'font-tiniest';
+                    }
                 }
             } else {
                 // Logic for columns without code - use adjustedRatio to account for images
@@ -260,27 +285,52 @@ function adjustFontSizeForSection(section) {
                 }
             }
         } else {
-            // Non-column slides: use absolute height thresholds for all
-            // Ratio is meaningless for centered content (flexbox adds empty space)
-            console.log('  -> Using absolute height thresholds for non-column slide');
-            
-            if (contentHeight > 850) {
-                section.classList.add('font-tiniest');
-                appliedClass = 'font-tiniest';
-            } else if (contentHeight > 750) {
-                section.classList.add('font-tinier');
-                appliedClass = 'font-tinier';
-            } else if (contentHeight > 700) {
-                section.classList.add('font-smallest');
-                appliedClass = 'font-smallest';
-            } else if (contentHeight > 650) {
-                section.classList.add('font-smaller');
-                appliedClass = 'font-smaller';
-            } else if (contentHeight > 600) {
-                section.classList.add('font-small');
-                appliedClass = 'font-small';
+            // Non-column slides: ratio-based thresholds.
+            // Using rects makes this scale-invariant and avoids hardcoded pixel thresholds
+            // that break when the deck is scaled to fit the viewport.
+            const hasCodeBlocks = contentDiv.querySelector('pre, code') !== null;
+
+            if (hasCodeBlocks) {
+                // Code slides tend to be visually dense even before they overflow,
+                // so start shrinking earlier than text-only slides.
+                if (heightRatio <= 0.80) {
+                    appliedClass = 'none';
+                } else if (heightRatio <= 0.85) {
+                    section.classList.add('font-small');
+                    appliedClass = 'font-small';
+                } else if (heightRatio <= 0.90) {
+                    section.classList.add('font-smaller');
+                    appliedClass = 'font-smaller';
+                } else if (heightRatio <= 0.95) {
+                    section.classList.add('font-smallest');
+                    appliedClass = 'font-smallest';
+                } else if (heightRatio <= 1.05) {
+                    section.classList.add('font-tinier');
+                    appliedClass = 'font-tinier';
+                } else {
+                    section.classList.add('font-tiniest');
+                    appliedClass = 'font-tiniest';
+                }
+            } else {
+                if (heightRatio <= 0.85) {
+                    appliedClass = 'none';
+                } else if (heightRatio <= 0.95) {
+                    section.classList.add('font-small');
+                    appliedClass = 'font-small';
+                } else if (heightRatio <= 1.05) {
+                    section.classList.add('font-smaller');
+                    appliedClass = 'font-smaller';
+                } else if (heightRatio <= 1.15) {
+                    section.classList.add('font-smallest');
+                    appliedClass = 'font-smallest';
+                } else if (heightRatio <= 1.25) {
+                    section.classList.add('font-tinier');
+                    appliedClass = 'font-tinier';
+                } else {
+                    section.classList.add('font-tiniest');
+                    appliedClass = 'font-tiniest';
+                }
             }
-            // Content <= 600px: keep normal font size
         }
 
         console.log('  -> Applied class:', appliedClass);
