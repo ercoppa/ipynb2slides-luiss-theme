@@ -559,11 +559,21 @@ div.multicolumn {
   background-repeat: no-repeat;
 }
 
+.reveal .slides section[data-state*="front"] {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    height: 100% !important;
+    gap: 0.35em !important;
+}
+
 #title {
     text-align: left;
-    margin-top: -50px;
     padding-left: 2.2%;
-    padding-bottom: 15px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
     font-size: 1.6em;
     font-weight: bold;
     color: var(--luiss-blue);
@@ -573,7 +583,9 @@ div.multicolumn {
     text-align: left;
     padding-left: 2.2%;
     font-size: 1.6em;
-    padding-bottom: 15px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
     font-weight: bold;
     color: var(--luiss-blue);
 }
@@ -581,7 +593,9 @@ div.multicolumn {
 #subtitle {
     text-align: left;
     padding-left: 2.2%;
-    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
     font-size: 1.5em;
     color: var(--luiss-blue);
 }
@@ -589,7 +603,9 @@ div.multicolumn {
 #subtitle-2 {
     text-align: left;
     padding-left: 2.2%;
-    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
     font-size: 1.5em;
     color: var(--luiss-blue);
 }
@@ -597,7 +613,9 @@ div.multicolumn {
 #date {
     text-align: left;
     padding-left: 2.25%;
-    padding-top: 3%;
+    margin-top: 0.75em;
+    margin-bottom: 0;
+    padding-top: 0;
     font-size: 1.0em;
     font-weight: bold;
     color: var(--luiss-blue);
@@ -1549,6 +1567,14 @@ html.reveal-print .reveal .slides .pdf-page > section[data-state~="normal"] {
   gap: 0 !important;
 }
 
+html.reveal-print .reveal .slides .pdf-page > section[data-state*="front"] {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: 0.35em !important;
+}
+
 html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-blue"] {
   display: flex !important;
   flex-direction: column !important;
@@ -1572,9 +1598,10 @@ html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-green"]
 .pdf-page > section[data-state*="front"] #title,
 .pdf-page #title {
   text-align: left !important;
-  margin-top: 370px !important;
   padding-left: 2.2% !important;
-  padding-bottom: 15px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
   font-size: 1.6em !important;
   font-weight: bold !important;
   color: var(--luiss-blue) !important;
@@ -1585,7 +1612,9 @@ html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-green"]
   text-align: left !important;
   padding-left: 2.2% !important;
   font-size: 1.6em !important;
-  padding-bottom: 15px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
   font-weight: bold !important;
   color: var(--luiss-blue) !important;
 }
@@ -1594,7 +1623,9 @@ html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-green"]
 .pdf-page #subtitle {
   text-align: left !important;
   padding-left: 2.2% !important;
-  padding-bottom: 10px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
   font-size: 1.5em !important;
   color: var(--luiss-blue) !important;
 }
@@ -1603,7 +1634,9 @@ html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-green"]
 .pdf-page #subtitle-2 {
   text-align: left !important;
   padding-left: 2.2% !important;
-  padding-bottom: 10px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
   font-size: 1.5em !important;
   color: var(--luiss-blue) !important;
 }
@@ -1612,7 +1645,9 @@ html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-green"]
 .pdf-page #date {
   text-align: left !important;
   padding-left: 2.25% !important;
-  padding-top: 3% !important;
+  margin-top: 0.75em !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
   font-size: 1.0em !important;
   font-weight: bold !important;
   color: var(--luiss-blue) !important;
