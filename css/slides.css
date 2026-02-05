@@ -618,7 +618,8 @@ div.multicolumn {
     background-repeat: no-repeat;
 }
 
-.break-green {
+.break-green,
+.reveal .slides section[data-state*="break-green"] {
     color: white;
     display: flex !important;
     flex-direction: column !important;
@@ -627,33 +628,39 @@ div.multicolumn {
     height: 100% !important;
 }
 
-.break-green h1 {
+.break-green h1,
+.reveal .slides section[data-state*="break-green"] h1 {
     color: white;
     font-weight: bold;
     font-size: 2.0em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
     padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
     text-align: left;
 }
 
-.break-green h2 {
+.break-green h2,
+.reveal .slides section[data-state*="break-green"] h2 {
     color: white;
     font-weight: bold;
     font-size: 2.0em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
     padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
     text-align: left;
 }
 
-.break-green p {
+.break-green p,
+.reveal .slides section[data-state*="break-green"] p {
     padding-top: 0;
     margin-top: 0.3em;
     font-size: 1.8em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
 }
 
 .break-blue .slide-background-content {
@@ -663,7 +670,8 @@ div.multicolumn {
     background-repeat: no-repeat;
 }
 
-.break-blue {
+.break-blue,
+.reveal .slides section[data-state*="break-blue"] {
     color: white;
     display: flex !important;
     flex-direction: column !important;
@@ -672,33 +680,61 @@ div.multicolumn {
     height: 100% !important;
 }
 
-.break-blue h1 {
+.break-blue h1,
+.reveal .slides section[data-state*="break-blue"] h1 {
     color: white;
     font-weight: bold;
     font-size: 2.0em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
     padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
     text-align: left;
 }
 
-.break-blue h2 {
+.break-blue h2,
+.reveal .slides section[data-state*="break-blue"] h2 {
     color: white;
     font-weight: bold;
     font-size: 2.0em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
     padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
     text-align: left;
 }
 
-.break-blue p {
+.break-blue p,
+.reveal .slides section[data-state*="break-blue"] p {
     padding-top: 0;
     margin-top: 0.3em;
     font-size: 1.8em;
     padding-left: 2.5%;
+}
+
+/* Break slides often place the subtitle text directly inside .content-center.
+   Ensure it lines up with the title and doesn't wrap. */
+.break-blue .content-center,
+.reveal .slides section[data-state*="break-blue"] .content-center {
+    padding-left: 2.5% !important;
+    padding-right: 2.5% !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+}
+
+/* Avoid double-indenting subtitles: break-blue paragraphs already have padding-left,
+   but inside .content-center we want alignment driven by the container padding. */
+.break-blue .content-center p,
+.reveal .slides section[data-state*="break-blue"] .content-center p {
+    padding-left: 0 !important;
+}
+
+.break-blue .content-center > p,
+.reveal .slides section[data-state*="break-blue"] .content-center > p {
+    white-space: nowrap !important;
+    width: auto !important;
 }
 
 .toc-blue .slide-background-content {
@@ -708,40 +744,49 @@ div.multicolumn {
     background-repeat: no-repeat;
 }
 
-.toc-blue {
+.toc-blue,
+.reveal .slides section[data-state*="toc-blue"] {
     color: white;
 }
 
-.toc-blue h2 {
+.toc-blue h2,
+.reveal .slides section[data-state*="toc-blue"] h2 {
     margin-top: -100px;
     color: white;
     font-weight: bold;
     font-size: 2.7em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
     padding-bottom: 0;
 }
 
-.toc-blue p {
+.toc-blue p,
+.reveal .slides section[data-state*="toc-blue"] p {
     margin-top: -50px;
     font-size: 1.6em;
     padding-left: 2.5%;
+    padding-right: 2.5%;
     font-weight: bold;
 }
 
-.toc-blue ol {
+.toc-blue ol,
+.reveal .slides section[data-state*="toc-blue"] ol {
     font-weight: normal;
     padding-top: 20px;
     margin-left: 2.5%;
+    margin-right: 2.5%;
 }
 
-.toc-blue li {
+.toc-blue li,
+.reveal .slides section[data-state*="toc-blue"] li {
     font-size: 1.3em;
     font-weight: normal;
     margin-left: 1.75%;
     padding-bottom: 20px;
 }
 
-.toc-blue strong {
+.toc-blue strong,
+.reveal .slides section[data-state*="toc-blue"] strong {
     color: white !important;
 }
     
@@ -754,7 +799,7 @@ div.multicolumn {
 }
 
 /* Default normal typography when body has normal class */
-body.normal .reveal .slides section h2 {
+html:not(.reveal-print) body.normal .reveal .slides section h2 {
     color: var(--luiss-blue) !important;
     padding-left: 2.5% !important;
     padding-right: 2.5% !important;
@@ -765,14 +810,14 @@ body.normal .reveal .slides section h2 {
     padding-bottom: 0 !important;
 }
 
-body.normal .reveal .slides section .content-center p {
+html:not(.reveal-print) body.normal .reveal .slides section .content-center p {
     color: var(--luiss-blue) !important;
     font-size: 1.05em;
     margin: 0 !important;
     margin-bottom: 0.5em !important;
 }
 
-body.normal .reveal .slides section strong {
+html:not(.reveal-print) body.normal .reveal .slides section strong {
     color: var(--luiss-blue) !important;
 }
 
@@ -1277,6 +1322,44 @@ body.normal .reveal .slides section strong {
 }
 
 /* Print-pdf clones */
+.pdf-page > section[data-state~="normal"] .content-center pre {
+    margin-top: 0 !important;
+    margin-bottom: 0.2em !important;
+    font-size: 1.0em;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center code {
+    font-size: 0.80em;
+}
+
+.pdf-page > section[data-state~="normal"] .content-center pre code {
+    font-size: 0.8em !important;
+    display: block;
+    line-height: 1.15 !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-small .content-center pre code {
+    font-size: 0.85em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-smaller .content-center pre code {
+    font-size: 0.80em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-smallest .content-center pre code {
+    font-size: 0.75em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-tinier .content-center pre code {
+    font-size: 0.72em !important;
+}
+
+.pdf-page > section[data-state~="normal"].font-tiniest .content-center pre code {
+    font-size: 0.68em !important;
+}
+
 .pdf-page > section[data-state~="normal"].font-small .content-center {
     font-size: 0.90em !important;
 }
@@ -1413,28 +1496,27 @@ body.print-pdf.front {
   background-position: 50% 50% !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
-  background-color: var(--hogent-black) !important;
   width: 100% !important;
   height: 100% !important;
 }
 
-.pdf-page:has(> section[data-state*="front"]) .slide-background-content {
+.pdf-page[data-slide-state*="front"] .slide-background-content {
   background-image: url('../backgrounds/front.png') !important;
 }
 
-.pdf-page:has(> section[data-state*="break-blue"]) .slide-background-content {
+.pdf-page[data-slide-state*="break-blue"] .slide-background-content {
   background-image: url('../backgrounds/blue.png') !important;
 }
 
-.pdf-page:has(> section[data-state*="break-green"]) .slide-background-content {
+.pdf-page[data-slide-state*="break-green"] .slide-background-content {
   background-image: url('../backgrounds/green.png') !important;
 }
 
-.pdf-page:has(> section[data-state*="toc-blue"]) .slide-background-content {
+.pdf-page[data-slide-state*="toc-blue"] .slide-background-content {
   background-image: url('../backgrounds/blue.png') !important;
 }
 
-.pdf-page:has(> section[data-state*="normal"]) .slide-background-content {
+.pdf-page[data-slide-state*="normal"] .slide-background-content {
   background-image: url('../backgrounds/normal.png') !important;
 }
 
@@ -1446,234 +1528,51 @@ body.print-pdf.front {
 }
 
 .pdf-page > section {
-  position: relative !important;
   z-index: 1 !important;
 }
 
-/* Generic slides (without specific data-state) - treat as normal slides */
-.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) {
-  color: var(--luiss-blue) !important;
+/* In print-pdf mode, sections lose their fixed-height parent. Reapply the
+   same fixed slide height so the normal-mode flex centering works. */
+html.reveal-print .reveal .slides .pdf-page > section:not(.stack) {
+  height: var(--slide-height, 1080px) !important;
+}
+
+/* Reveal's print stylesheet forces `section` to be block with zero padding.
+   Override it with higher specificity so our normal slide layouts keep
+   working in print view. */
+html.reveal-print .reveal .slides .pdf-page > section[data-state~="normal"] {
   display: flex !important;
   flex-direction: column !important;
   justify-content: flex-start !important;
   align-items: stretch !important;
-  height: 100% !important;
-  width: 100% !important;
-  padding-top: 20px !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-top: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  position: absolute !important;
+  padding-top: 10px !important;
+  gap: 0 !important;
 }
 
-.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) h2 {
-  color: var(--luiss-blue) !important;
-  padding-left: 4.0% !important;
-  padding-right: 4.0% !important;
-  font-size: 1.1em !important;
-  font-weight: bold !important;
-  margin-top: 25px !important;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-  flex: 0 0 auto !important;
-}
-
-.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) .content-center {
-  color: var(--luiss-blue) !important;
-  flex: 1 1 auto !important;
+html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-blue"] {
   display: flex !important;
   flex-direction: column !important;
-  align-items: flex-start !important;
   justify-content: center !important;
-  padding-left: 4.0% !important;
-  padding-right: 4.0% !important;
-  padding-bottom: 110px !important;
-  margin-top: -20px !important;
-}
-
-.pdf-page > section:not([data-state*="front"]):not([data-state*="break-blue"]):not([data-state*="break-green"]):not([data-state*="toc-blue"]) strong {
-  color: var(--luiss-blue) !important;
-}
-
-/* Place NORMAL slide content in print-pdf without overriding Reveal's centering */
-.pdf-page > section[data-state~="normal"] {
-  color: var(--luiss-blue) !important;
-  /* Let Reveal's print-pdf sizing handle positioning; only adjust padding/width */
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  padding-top: 20px !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-top: 0 !important;
-  position: relative !important;
-}
-
-.pdf-page > section[data-state~="normal"] h2 {
-  color: var(--luiss-blue) !important;
-  padding-left: 4.0% !important;
-  padding-right: 4.0% !important;
-  font-size: 1.0em !important;
-  font-weight: bold !important;
-  margin-top: 10px !important;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-  flex: 0 0 auto !important;
-}
-
-.pdf-page > section[data-state~="normal"] .content-center {
-  color: var(--luiss-blue) !important;
-  flex: 1 1 auto !important;
-  display: flex !important;
-  flex-direction: column !important;
   align-items: flex-start !important;
-  /* In print, keep content top-aligned and more compact */
-  justify-content: flex-start !important;
-  padding-left: 4.0% !important;
-  padding-right: 4.0% !important;
-  padding-bottom: 20px !important;
-  margin-top: 0 !important;
 }
 
-.pdf-page > section[data-state~="normal"] strong {
-  color: var(--luiss-blue) !important;
-}
-
-/* Break blue slide layout in print-pdf mode */
-.pdf-page > section[data-state*="break-blue"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  overflow: visible !important;
-  margin: 0 !important;
+html.reveal-print .reveal .slides .pdf-page > section[data-state*="break-green"] {
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-start !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
 }
 
-.pdf-page > section[data-state*="break-blue"] h1 {
-  margin-top: 0px !important;
+.pdf-page > section[data-state*="toc-blue"] a {
   color: white !important;
-  font-weight: bold !important;
-  font-size: 2.0em !important;
-  padding-left: 2.5% !important;
-  padding-bottom: 0 !important;
-  text-align: left !important;
-}
-
-.pdf-page > section[data-state*="break-blue"] h2 {
-  margin-top: 0px !important;
-  color: white !important;
-  font-weight: bold !important;
-  font-size: 2.0em !important;
-  padding-left: 2.5% !important;
-  padding-bottom: 0 !important;
-  text-align: left !important;
-}
-
-.pdf-page > section[data-state*="break-blue"] p {
-  padding-top: 0 !important;
-  margin-top: -30px !important;
-  font-size: 1.8em !important;
-  padding-left: 2.5% !important;
-  color: white !important;
-}
-
-/* Break green slide layout in print-pdf mode */
-.pdf-page > section[data-state*="break-green"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  overflow: visible !important;
-  margin: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-}
-
-.pdf-page > section[data-state*="break-green"] h1 {
-  margin-top: 0px !important;
-  color: white !important;
-  font-weight: bold !important;
-  font-size: 2.0em !important;
-  padding-left: 2.5% !important;
-  padding-bottom: 0 !important;
-}
-
-.pdf-page > section[data-state*="break-green"] h2 {
-  margin-top: 0px !important;
-  color: white !important;
-  font-weight: bold !important;
-  font-size: 2.0em !important;
-  padding-left: 2.5% !important;
-  padding-bottom: 0 !important;
-}
-
-.pdf-page > section[data-state*="break-green"] p {
-  padding-top: 0 !important;
-  margin-top: -30px !important;
-  font-size: 1.8em !important;
-  padding-left: 2.5% !important;
-  color: white !important;
-}
-
-/* TOC blue slide layout in print-pdf mode */
-.pdf-page > section[data-state*="toc-blue"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  overflow: visible !important;
-  margin: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-}
-
-.pdf-page > section[data-state*="toc-blue"] h2 {
-  margin-top: -100px !important;
-  color: white !important;
-  font-weight: bold !important;
-  font-size: 2.7em !important;
-  padding-left: 2.5% !important;
-  padding-bottom: 0 !important;
-}
-
-.pdf-page > section[data-state*="toc-blue"] p {
-  margin-top: -50px !important;
-  font-size: 1.6em !important;
-  padding-left: 2.5% !important;
-  font-weight: bold !important;
-  color: white !important;
-}
-
-.pdf-page > section[data-state*="toc-blue"] ol {
-  font-weight: normal !important;
-  padding-top: 20px !important;
-  padding-left: 0 !important;
-  margin-left: 2.5% !important;
-}
-
-.pdf-page > section[data-state*="toc-blue"] li {
-  font-size: 1.3em !important;
-  font-weight: normal !important;
-  margin-left: 1.5em !important;
-  padding-bottom: 20px !important;
-  color: white !important;
-}
-
-.pdf-page > section[data-state*="toc-blue"] strong {
-  color: white !important;
+  text-decoration: none !important;
 }
 
 /* Front slide text colors and layout in print-pdf mode */
 .pdf-page > section[data-state*="front"] #title,
 .pdf-page #title {
   text-align: left !important;
-  margin-top: -50px !important;
+  margin-top: 370px !important;
   padding-left: 2.2% !important;
   padding-bottom: 15px !important;
   font-size: 1.6em !important;
@@ -1952,8 +1851,6 @@ body.print-pdf.front {
 /* Ensure slide numbers are visible in print-pdf mode */
 .pdf-page > section::after {
   color: var(--luiss-blue) !important;
-  right: 4.5% !important;
-  bottom: 40px !important;
 }
 
 /* Hide controls and progress in print-pdf mode */

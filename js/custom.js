@@ -1,5 +1,86 @@
 console.log('Custom.js loaded!');
 
+function isPrintPdf() {
+    if (/\bprint-pdf\b/i.test(window.location.search)) return true;
+    if (typeof Reveal !== 'undefined' && Reveal?.getConfig) {
+        try {
+            return Reveal.getConfig()?.view === 'print';
+        } catch (e) {
+            // Ignore: Reveal may not be initialized yet
+        }
+    }
+    return document.documentElement.classList.contains('print-pdf') || document.body.classList.contains('print-pdf');
+}
+
+function ensureDefaultDataState() {
+    const sections = document.querySelectorAll('.reveal .slides section:not(.stack), .pdf-page > section:not(.stack)');
+    sections.forEach((section) => {
+        const stateAttr = section.getAttribute('data-state');
+        if (!stateAttr || stateAttr.trim() === '') {
+            section.setAttribute('data-state', 'normal');
+        }
+    });
+}
+
+function ensurePdfPageSlideStates() {
+    const pdfPages = document.querySelectorAll('.pdf-page');
+    if (!pdfPages || pdfPages.length === 0) return;
+
+    pdfPages.forEach((page) => {
+        const children = Array.from(page.children);
+        const slide = children.find((el) => el && el.tagName === 'SECTION');
+        if (!slide) return;
+
+        const stateAttr = slide.getAttribute('data-state') || '';
+        page.setAttribute('data-slide-state', stateAttr);
+    });
+}
+
+(function ensureDefaultDataStateEarly() {
+    let attempts = 0;
+
+    function tick() {
+        ensureDefaultDataState();
+
+        if (isPrintPdf()) {
+            ensurePdfPageSlideStates();
+        }
+
+        const all = document.querySelectorAll('.reveal .slides section:not(.stack)');
+        let missing = 0;
+        all.forEach((section) => {
+            const stateAttr = section.getAttribute('data-state');
+            if (!stateAttr || stateAttr.trim() === '') missing++;
+        });
+
+        attempts++;
+
+        if (attempts > 120) return;
+
+        requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+})();
+
+// In Reveal's print view, slides can be vertically centered on the PDF page
+// based on each slide's scrollHeight when `center: true`. This makes the
+// y-position of the slide vary across pages (title not consistently near the
+// top). To keep print mode visually consistent with on-screen mode, disable
+// this centering only when ?print-pdf is active.
+(function patchRevealInitForPrint() {
+    if (!/\bprint-pdf\b/i.test(window.location.search)) return;
+    if (typeof Reveal === 'undefined' || typeof Reveal.initialize !== 'function') return;
+    const originalInitialize = Reveal.initialize.bind(Reveal);
+    Reveal.initialize = function patchedInitialize(options) {
+        const opts = options ? { ...options } : {};
+        if (typeof opts.center === 'undefined') {
+            opts.center = false;
+        }
+        return originalInitialize(opts);
+    };
+})();
+
 Reveal.on('ready', function() {
     console.log('Reveal ready event fired!');
     
@@ -12,7 +93,7 @@ Reveal.on('ready', function() {
             adjustFontSizeForCurrentSlide();
             setTimeout(adjustFontSizeForCurrentSlide, 150);
             setTimeout(adjustFontSizeForCurrentSlide, 500);
-            if (document.body.classList.contains('print-pdf')) {
+            if (isPrintPdf()) {
                 adjustFontSizeForAllSlides();
             }
         });
@@ -34,6 +115,8 @@ Reveal.on('ready', function() {
                 section.setAttribute('data-state', 'normal');
             }
         });
+
+        ensurePdfPageSlideStates();
 
         // Re-run adjustments after the print layout has been applied
         setTimeout(function() {
@@ -85,7 +168,7 @@ function adjustFontSizeForCurrentSlide() {
         adjustFontSizeForSection(current);
     }
     // Print-pdf clones must be processed as a whole document
-    if (document.body.classList.contains('print-pdf')) {
+    if (isPrintPdf()) {
         adjustFontSizeForAllSlides();
     }
 }
@@ -161,6 +244,26 @@ function adjustFontSizeForSection(section) {
         // Force reflow
         contentDiv.offsetHeight;
 
+        const isPdfSection = section.closest('.pdf-page') !== null;
+        const preOverflowStates = [];
+        if (isPdfSection) {
+            const preEls = Array.from(contentDiv.querySelectorAll('pre, pre code'));
+            preEls.forEach(el => {
+                preOverflowStates.push({
+                    el,
+                    overflow: el.style.overflow,
+                    overflowY: el.style.overflowY,
+                    maxHeight: el.style.maxHeight,
+                    height: el.style.height,
+                });
+                el.style.overflow = 'visible';
+                el.style.overflowY = 'visible';
+                el.style.maxHeight = 'none';
+                el.style.height = 'auto';
+            });
+            contentDiv.offsetHeight;
+        }
+
         const rects = [];
         const range = document.createRange();
         range.selectNodeContents(contentDiv);
@@ -183,7 +286,23 @@ function adjustFontSizeForSection(section) {
             contentHeight = bottomMost - contentTop;
         }
 
-        const availableHeight = sectionBottom - contentTop;
+        let availableHeight = sectionBottom - contentTop;
+        if (isPdfSection) {
+            const slideSize = Reveal.getComputedSlideSize(window.innerWidth, window.innerHeight);
+            const sectionTop = section.getBoundingClientRect().top;
+            const topInset = contentTop - sectionTop;
+            availableHeight = slideSize.height - topInset;
+        }
+
+        if (preOverflowStates.length > 0) {
+            preOverflowStates.forEach(state => {
+                state.el.style.overflow = state.overflow;
+                state.el.style.overflowY = state.overflowY;
+                state.el.style.maxHeight = state.maxHeight;
+                state.el.style.height = state.height;
+            });
+            contentDiv.offsetHeight;
+        }
         
         // Restore fragment states
         fragmentStates.forEach(state => {
